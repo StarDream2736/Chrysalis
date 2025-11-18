@@ -47,7 +47,7 @@
 
                 <StackPanel x:Name="VersionBlock" Orientation="Horizontal">
                     <StackPanel.Resources>
-                        <SolidColorBrush x:Key="Highlight" Color="#f49107" />
+                        <SolidColorBrush x:Key="Highlight" Color="#61AFEF" />
                     </StackPanel.Resources>
                     <StackPanel.Styles>
                         <Style Selector="TextBlock.Update">

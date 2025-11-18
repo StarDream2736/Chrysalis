@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.IO.Abstractions;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Text.Json;
 using Microsoft.Toolkit.HighPerformance;
 
 namespace Chrysalis.Services;
@@ -125,7 +126,162 @@ public class Installer : IInstaller
         await _installed.RecordInstalledState(mod);
     }
 
+    #region BepInEx 安装
+
+    /// <summary>
+    /// 安装BepInEx框架
+    /// </summary>
+    public async Task InstallBepInEx(Action<ModProgressArgs> setProgress)
+    {
+        await _semaphore.WaitAsync();
+
+        try
+        {
+            setProgress(new ModProgressArgs());
+
+            string gameRoot = _config.GameRootFolder;
+            
+            // 检查是否已安装
+            if (GameConfig.IsBepInExInstalled(gameRoot))
+            {
+                Log.Logger.Information("BepInEx已安装在 {GameRoot}", gameRoot);
+                setProgress(new ModProgressArgs { Completed = true });
+                return;
+            }
+
+            Log.Logger.Information("开始下载BepInEx...");
+
+            // 使用固定的稳定版本链接，避免GitHub API速率限制
+            // BepInEx 5.4.23.2 (2024年稳定版)
+            string downloadUrl;
+            string fileName;
+            
+            if (OperatingSystem.IsWindows())
+            {
+                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip";
+                fileName = "BepInEx_win_x64_5.4.23.2.zip";
+            }
+            else if (OperatingSystem.IsLinux())
+            {
+                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_linux_x64_5.4.23.2.zip";
+                fileName = "BepInEx_linux_x64_5.4.23.2.zip";
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_macos_x64_5.4.23.2.zip";
+                fileName = "BepInEx_macos_x64_5.4.23.2.zip";
+            }
+            else
+            {
+                throw new PlatformNotSupportedException("当前操作系统不受支持");
+            }
+            
+            Log.Logger.Information("下载 {FileName} 从 {Url}", fileName, downloadUrl);
+
+            // 下载BepInEx
+            var (data, _) = await DownloadFile(downloadUrl, progress =>
+            {
+                setProgress(new ModProgressArgs { Download = progress });
+            });
+
+            Log.Logger.Information("下载完成，开始解压到 {GameRoot}", gameRoot);
+
+            // 解压到游戏根目录
+            ExtractZip(data, gameRoot);
+            
+            // 列出解压后的文件结构（调试用）
+            var bepInExPath = Path.Combine(gameRoot, GameConfig.BepInExFolder);
+            if (Directory.Exists(bepInExPath))
+            {
+                Log.Logger.Information("BepInEx文件夹存在: {Path}", bepInExPath);
+                var subdirs = Directory.GetDirectories(bepInExPath);
+                Log.Logger.Information("子目录: {Subdirs}", string.Join(", ", subdirs.Select(Path.GetFileName)));
+            }
+            else
+            {
+                Log.Logger.Warning("BepInEx文件夹不存在: {Path}", bepInExPath);
+            }
+
+            // 创建plugins目录（在验证前创建，因为验证不再检查plugins）
+            var pluginsPath = GameConfig.GetBepInExPluginsPath(gameRoot);
+            _fs.Directory.CreateDirectory(pluginsPath);
+            Log.Logger.Information("创建plugins目录: {Path}", pluginsPath);
+
+            // 验证安装
+            if (!GameConfig.IsBepInExInstalled(gameRoot))
+            {
+                var corePath = Path.Combine(bepInExPath, GameConfig.BepInExCoreFolder);
+                var winhttpPath = Path.Combine(gameRoot, "winhttp.dll");
+                throw new InvalidOperationException(
+                    $"BepInEx解压后验证失败。\n" +
+                    $"BepInEx路径存在: {Directory.Exists(bepInExPath)}\n" +
+                    $"Core路径存在: {Directory.Exists(corePath)}\n" +
+                    $"winhttp.dll存在: {File.Exists(winhttpPath)}");
+            }
+            
+            Log.Logger.Information("BepInEx安装成功！");
+            
+            setProgress(new ModProgressArgs { Completed = true });
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    /// <summary>
+    /// 卸载BepInEx框架
+    /// </summary>
+    public async Task UninstallBepInEx()
+    {
+        await _semaphore.WaitAsync();
+
+        try
+        {
+            string gameRoot = _config.GameRootFolder;
+            string bepInExPath = Path.Combine(gameRoot, GameConfig.BepInExFolder);
+
+            if (!_fs.Directory.Exists(bepInExPath))
+            {
+                Log.Logger.Information("BepInEx未安装，无需卸载");
+                return;
+            }
+
+            Log.Logger.Information("卸载BepInEx从 {GameRoot}", gameRoot);
+            
+            // 删除BepInEx文件夹
+            _fs.Directory.Delete(bepInExPath, true);
+            
+            // 删除可能的其他BepInEx文件（如doorstop等）
+            var bepInExFiles = new[] 
+            { 
+                "winhttp.dll",      // BepInEx 5.x doorstop
+                "doorstop_config.ini",
+                ".doorstop_version"
+            };
+
+            foreach (var file in bepInExFiles)
+            {
+                string filePath = Path.Combine(gameRoot, file);
+                if (_fs.File.Exists(filePath))
+                {
+                    _fs.File.Delete(filePath);
+                    Log.Logger.Information("删除BepInEx文件: {File}", file);
+                }
+            }
+
+            Log.Logger.Information("BepInEx卸载完成");
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    #endregion
+
     /// <remarks> This enables the API if it's installed! </remarks>
+    [Obsolete("Silksong使用BepInEx，不再需要Modding API")]
     public async Task InstallApi(IInstaller.ReinstallPolicy policy = IInstaller.ReinstallPolicy.SkipUpToDate)
     {
         await _semaphore.WaitAsync();
@@ -179,6 +335,7 @@ public class Installer : IInstaller
         await _installed.RecordApiState(new InstalledState(true, new Version(ver, 0, 0), true));
     }
 
+    [Obsolete("Silksong使用BepInEx，不再需要Modding API")]
     public async Task ToggleApi()
     {
         await _semaphore.WaitAsync();

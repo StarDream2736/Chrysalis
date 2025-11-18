@@ -84,8 +84,13 @@ public partial class ModPageViewModel : ViewModelBase
 
     private readonly ILogger _logger;
 
-    public ModState Api      => _mods.ApiInstall;
-    public bool ApiOutOfDate => _mods.ApiInstall is InstalledState { Version: var v } && v.Major < _db.Api.Version;
+    // BepInEx鐘舵€?
+    public bool IsBepInExInstalled => GameConfig.IsBepInExInstalled(_settings.GameRootFolder);
+    public string BepInExButtonText => IsBepInExInstalled ? "Uninstall BepInEx" : "Install BepInEx";
+    
+    // 鍏煎灞炴€э紙鐢ㄤ簬BepInEx锛?
+    public ModState Api => IsBepInExInstalled ? new InstalledState(true, new Version(1, 0), true) : new NotInstalledState();
+    public bool ApiOutOfDate => false; // BepInEx涓嶉渶瑕侀€氳繃绋嬪簭鏇存柊
     public bool CanUpdateAll => _items.Any(x => x.State is InstalledState { Updated: false }) && !_updating;
     public ReadOnlyObservableCollection<ModItem> FilteredItems => _filteredItems;
 
@@ -133,30 +138,162 @@ public partial class ModPageViewModel : ViewModelBase
             );
 
         this.WhenAnyValue(x => x.SelectedTag).Subscribe(t => { TagFilter = m => m.Tags.HasFlag(t); });
+        
+        // 启动时检测BepInEx安装状态
+        CheckBepInExStatus();
+    }
+
+    /// <summary>
+    /// 检测并更新BepInEx安装状态
+    /// </summary>
+    private void CheckBepInExStatus()
+    {
+        RaisePropertyChanged(nameof(IsBepInExInstalled));
+        RaisePropertyChanged(nameof(BepInExButtonText));
+        RaisePropertyChanged(nameof(Api));
     }
 
     private async Task ReinstallApiAsync()
     {
-        _logger.LogInformation("Reinstalling API, {State}", _mods.ApiInstall);
+        if (!IsBepInExInstalled)
+        {
+            _logger.LogInformation("BepInEx未安装，无需卸载");
+            return;
+        }
+
+        _logger.LogInformation("卸载BepInEx");
         
-        await _installer.InstallApi(IInstaller.ReinstallPolicy.ForceReinstall);
+        try
+        {
+            var result = await MessageBoxManager.GetMessageBoxStandard(
+                "确认卸载",
+                "确定要卸载 BepInEx 吗？这将删除所有已安装的Mod。",
+                ButtonEnum.YesNo,
+                Icon.Warning
+            ).ShowAsync();
+
+            if (result != ButtonResult.Yes)
+                return;
+
+            await _installer.UninstallBepInEx();
+            
+            // 更新UI状态
+            RaisePropertyChanged(nameof(IsBepInExInstalled));
+            RaisePropertyChanged(nameof(BepInExButtonText));
+            RaisePropertyChanged(nameof(Api));
+            
+            await MessageBoxManager.GetMessageBoxStandard(
+                "卸载成功",
+                "BepInEx 已成功卸载！",
+                ButtonEnum.Ok,
+                Icon.Success
+            ).ShowAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to uninstall BepInEx");
+            
+            await MessageBoxManager.GetMessageBoxStandard(
+                "卸载失败",
+                $"BepInEx 卸载失败：{e.Message}",
+                ButtonEnum.Ok,
+                Icon.Error
+            ).ShowAsync();
+        }
     }
 
     private async Task ToggleApiCommand()
     {
-        _logger.LogInformation("Toggling API, current state: {State}", _mods.ApiInstall);
-        
-        if (_mods.ApiInstall is not InstalledState)
-            await _installer.InstallApi();
-        else 
-            await _installer.ToggleApi();
-        
-        RaisePropertyChanged(nameof(Api));
+        if (!IsBepInExInstalled)
+        {
+            // 安装BepInEx
+            _logger.LogInformation("Installing BepInEx");
+            try
+            {
+                await _installer.InstallBepInEx(progress => {
+                    Dispatcher.UIThread.Invoke(() => {
+                        ProgressBarVisible = !progress.Completed;
+                        if (progress.Download?.PercentComplete is { } percent) {
+                            ProgressBarIndeterminate = false;
+                            Progress = percent;
+                        } else {
+                            ProgressBarIndeterminate = true;
+                        }
+                    });
+                });
+                
+                // 更新UI状态
+                CheckBepInExStatus();
+                
+                // 显示成功消息
+                await MessageBoxManager.GetMessageBoxStandard(
+                    "安装成功",
+                    "BepInEx 已成功安装！",
+                    ButtonEnum.Ok,
+                    Icon.Success
+                ).ShowAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to install BepInEx");
+                ProgressBarVisible = false;
+                
+                // 显示错误消息
+                await MessageBoxManager.GetMessageBoxStandard(
+                    "安装失败",
+                    $"BepInEx 安装失败：{e.Message}",
+                    ButtonEnum.Ok,
+                    Icon.Error
+                ).ShowAsync();
+            }
+        }
+        else
+        {
+            // 卸载BepInEx
+            _logger.LogInformation("Uninstalling BepInEx");
+            
+            try
+            {
+                var result = await MessageBoxManager.GetMessageBoxStandard(
+                    "确认卸载",
+                    "确定要卸载 BepInEx 吗？这将删除所有已安装的Mod。",
+                    ButtonEnum.YesNo,
+                    Icon.Warning
+                ).ShowAsync();
+
+                if (result != ButtonResult.Yes)
+                    return;
+
+                await _installer.UninstallBepInEx();
+                
+                // 更新UI状态
+                CheckBepInExStatus();
+                
+                await MessageBoxManager.GetMessageBoxStandard(
+                    "卸载成功",
+                    "BepInEx 已成功卸载！",
+                    ButtonEnum.Ok,
+                    Icon.Success
+                ).ShowAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to uninstall BepInEx");
+                
+                await MessageBoxManager.GetMessageBoxStandard(
+                    "卸载失败",
+                    $"BepInEx 卸载失败：{e.Message}",
+                    ButtonEnum.Ok,
+                    Icon.Error
+                ).ShowAsync();
+            }
+        }
     }
 
     public void OpenModsDirectory()
     {
-        var modsFolder = Path.Combine(_settings.ManagedFolder, "Mods");
+        // 使用BepInEx的plugins文件夹作为Mods目录
+        var modsFolder = _settings.ModsFolder;
 
         // Create the directory if it doesn't exist,
         // so we don't open a non-existent folder.

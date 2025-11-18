@@ -70,7 +70,7 @@
                 Grid.Column="0"
                 CornerRadius="5"
                 ClipToBounds="True">
-                <Panel Background="#232429">
+                <Panel Background="{DynamicResource ThemeBackgroundBrush}">
                     <Image
                         Source="{DynamicResource Icon}"
                         Height="40"

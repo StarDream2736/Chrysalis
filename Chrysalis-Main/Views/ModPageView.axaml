@@ -99,32 +99,20 @@
                         Classes="Small" />
                 </Grid>
 
-                <ToggleSplitButton
+                <Button
                     Grid.Column="3"
                     Grid.Row="0"
                     Margin="5 0"
                     Classes="Primary"
+                    Theme="{DynamicResource SolidButton}"
                     Width="140"
-                    IsChecked="{Binding Api, Converter={x:Static c:ModStateConverters.IsInstalledAndEnabled}, Mode=OneWay}"
                     Command="{Binding ToggleApi}"
                     VerticalAlignment="Stretch">
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <i:Icon Value="fa-solid fa-power-off" />
-                        <TextBlock Text="{Binding Api, Converter={x:Static c:ModStateConverters.ToApiToggleInstallString}}" />
+                        <TextBlock Text="{Binding BepInExButtonText}" />
                     </StackPanel>
-                    <ToggleSplitButton.Styles>
-                        <Style Selector="Button#PART_SecondaryButton">
-                            <Setter Property="IsVisible" Value="{Binding Api, Converter={x:Static c:ModStateConverters.IsInstalled}}" />
-                        </Style>
-                    </ToggleSplitButton.Styles>
-                    <ToggleSplitButton.Flyout>
-                            <MenuFlyout Placement="BottomEdgeAlignedRight">
-                                <MenuItem
-                                    Header="Re-install API"
-                                    Command="{Binding ReinstallApi}" />
-                            </MenuFlyout>
-                    </ToggleSplitButton.Flyout>
-                </ToggleSplitButton>
+                </Button>
 
                 <Button Classes="Primary"
                         Theme="{DynamicResource SolidButton}"

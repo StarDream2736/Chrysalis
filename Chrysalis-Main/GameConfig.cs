@@ -68,8 +68,9 @@ public static class GameConfig
         var corePath = Path.Combine(bepInExPath, BepInExCoreFolder);
         var pluginsPath = Path.Combine(bepInExPath, BepInExPluginsFolder);
         
+        // BepInEx 5.x: 只需检查BepInEx文件夹和core文件夹存在即可
+        // plugins文件夹会在安装后手动创建
         return Directory.Exists(bepInExPath) 
-               && Directory.Exists(corePath) 
-               && Directory.Exists(pluginsPath);
+               && (Directory.Exists(corePath) || File.Exists(Path.Combine(gameRoot, "winhttp.dll")));
     }
 }

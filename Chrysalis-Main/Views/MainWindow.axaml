@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:s="using:Chrysalis.ViewModels"
+        Width="850" Height="500"
+        x:Class="Chrysalis.Views.MainWindow"
+        x:DataType="s:MainWindowViewModel"
+        mc:Ignorable="d"
+        Icon="/Assets/chrysalis.ico"
+        Title="Chrysalis">
+    <Design.DataContext>
+        <s:MainWindowViewModel />
+    </Design.DataContext>
+    <TabControl TabStripPlacement="Top" HorizontalAlignment="Stretch">
+        <TabItem x:Name="ModListTab" Header="Mods" HorizontalContentAlignment="Stretch">
+            <StackPanel VerticalAlignment="Center" Spacing="25">
+                <TextBlock 
+                    x:Name="InfoBlock" 
+                    FontWeight="Bold" 
+                    FontSize="20" 
+                    Text="{Binding InfoText}"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding InfoText, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                <ProgressBar Theme="{DynamicResource ProgressRing}" Width="100" Height="100" IsIndeterminate="True" />
+            </StackPanel>
+        </TabItem>
+
+        <TabItem x:Name="SettingsTab" Header="Settings" Content="{Binding SettingsPage, TargetNullValue=''}" />
+
+        <TabItem Header="About">
+            <s:AboutViewModel />
+        </TabItem>
+    </TabControl>
+</Window>

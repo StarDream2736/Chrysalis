@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
+    <!-- 通用样式 - 仅在深色主题下应用 -->
     <Style Selector="Window">
         <Setter Property="Background">
             <SolidColorBrush Color="#1A0A10" Opacity="0.95"/>

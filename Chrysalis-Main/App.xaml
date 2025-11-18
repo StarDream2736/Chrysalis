@@ -34,7 +34,6 @@
     </Style>
     <Style Selector="Window">
         <Setter Property="FontFamily" Value="{StaticResource InterFont}"/>
-        <Setter Property="Background" Value="#1A0A10"/> 
     </Style>
     </Application.Styles>
     

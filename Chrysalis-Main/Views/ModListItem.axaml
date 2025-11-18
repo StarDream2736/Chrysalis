@@ -15,16 +15,7 @@
                         x:DataType="models:ModItem"
                         x:Class="Chrysalis.Views.ModListItem">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Light">
-                    <svg:Svg x:Key="Icon" Path="avares://Chrysalis/Assets/placeholder_light.svg" />
-                </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
-                    <svg:SvgImage x:Key="Icon" Source="avares://Chrysalis/Assets/placeholder.svg" />
-                </ResourceDictionary>
-            </ResourceDictionary.ThemeDictionaries>
-        </ResourceDictionary>
+        <svg:SvgImage x:Key="Icon" Source="avares://Chrysalis/Assets/placeholder.svg" />
     </UserControl.Resources>
     
     <UserControl.Styles>

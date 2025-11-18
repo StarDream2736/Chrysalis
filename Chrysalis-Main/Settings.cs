@@ -289,9 +289,7 @@ public class Settings : ISettings
     {
         Debug.Assert(Application.Current is not null);
         
-        Application.Current.RequestedThemeVariant = PreferredTheme == Theme.Dark
-            ? ThemeVariant.Dark
-            : ThemeVariant.Light;
+        Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
         
         LocalizeExtension.ChangeLanguage(new CultureInfo(PreferredCulture));
     }

@@ -348,3 +348,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Project documentation and scripts (keep local only)
+Docs/

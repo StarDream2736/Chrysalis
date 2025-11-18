@@ -8,9 +8,53 @@
     </Application.DataTemplates>
     <Application.Resources>
         <FontFamily x:Key="InterFont">avares://Avalonia.Fonts.Inter/Assets#Inter</FontFamily>
-        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedDefaultBackground" Color="{DynamicResource SemiBlue4Color}" />
-        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedPointeroverBackground" Color="{DynamicResource SemiBlue5Color}" />
-        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedPressedBackground" Color="{DynamicResource SemiBlue6Color}" />
+        
+        <!-- === Chrysalis 主题色 === -->
+        
+        <!-- 主色 - 暗红色 -->
+        <Color x:Key="PrimaryColor">#6E1503</Color>
+        <Color x:Key="PrimaryHoverColor">#8E1D05</Color>
+        <Color x:Key="PrimaryPressedColor">#5E1102</Color>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
+        <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}" />
+        <SolidColorBrush x:Key="PrimaryPressedBrush" Color="{StaticResource PrimaryPressedColor}" />
+        
+        <!-- 辅助色 - 粉红色 -->
+        <Color x:Key="SecondaryColor">#E91E63</Color>
+        <Color x:Key="SecondaryLightColor">#F48FB1</Color>
+        <Color x:Key="SecondaryDarkColor">#C2185B</Color>
+        <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
+        <SolidColorBrush x:Key="SecondaryLightBrush" Color="{StaticResource SecondaryLightColor}" />
+        <SolidColorBrush x:Key="SecondaryDarkBrush" Color="{StaticResource SecondaryDarkColor}" />
+        
+        <!-- 功能色 -->
+        <Color x:Key="SuccessColor">#4CAF50</Color>
+        <Color x:Key="WarningColor">#FF9800</Color>
+        <Color x:Key="ErrorColor">#F44336</Color>
+        <Color x:Key="InfoColor">#2196F3</Color>
+        <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}" />
+        <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}" />
+        <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
+        <SolidColorBrush x:Key="InfoBrush" Color="{StaticResource InfoColor}" />
+        
+        <!-- 中性色 - 深色主题 -->
+        <Color x:Key="BackgroundDarkColor">#1E1E1E</Color>
+        <Color x:Key="SurfaceDarkColor">#2D2D2D</Color>
+        <Color x:Key="TextPrimaryColor">#FFFFFF</Color>
+        <Color x:Key="TextSecondaryColor">#CCCCCC</Color>
+        <Color x:Key="BorderColor">#424242</Color>
+        
+        <!-- 中性色 - 浅色主题 -->
+        <Color x:Key="BackgroundLightColor">#F5F5F5</Color>
+        <Color x:Key="SurfaceLightColor">#FFFFFF</Color>
+        <Color x:Key="TextPrimaryLightColor">#212121</Color>
+        <Color x:Key="TextSecondaryLightColor">#757575</Color>
+        <Color x:Key="BorderLightColor">#E0E0E0</Color>
+        
+        <!-- 开关控件配色（使用暗红色主题） -->
+        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedDefaultBackground" Color="{StaticResource PrimaryColor}" />
+        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedPointeroverBackground" Color="{StaticResource PrimaryHoverColor}" />
+        <SolidColorBrush x:Key="ToggleSwitchContainerCheckedPressedBackground" Color="{StaticResource PrimaryPressedColor}" />
     </Application.Resources>
     <Application.Styles>
         <SimpleTheme/> 

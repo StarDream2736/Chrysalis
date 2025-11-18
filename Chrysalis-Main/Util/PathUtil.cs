@@ -85,17 +85,7 @@ public static class PathUtil
         return ValidateWithSuffix(path);
     }
     
-    internal static readonly string[] SUFFIXES =
-    {
-        // Steam (推测)
-        "Hollow Knight Silksong_Data/Managed",
-        // GOG (推测)
-        "Hollow Knight Silksong_Data/Managed",  
-        // BepInEx路径 (如果已安装BepInEx)
-        "BepInEx/core",
-        // Mac
-        "Contents/Resources/Data/Managed"
-    };
+    internal static readonly string[] SUFFIXES = GameConfig.GetPathSuffixes();
 
     public static PathResult ValidateWithSuffix(string? root)
     {

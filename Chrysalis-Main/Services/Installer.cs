@@ -144,82 +144,71 @@ public class Installer : IInstaller
             // 检查是否已安装
             if (GameConfig.IsBepInExInstalled(gameRoot))
             {
-                Log.Logger.Information("BepInEx已安装在 {GameRoot}", gameRoot);
+                Log.Logger.Information("BepInEx already installed at {GameRoot}", gameRoot);
                 setProgress(new ModProgressArgs { Completed = true });
                 return;
             }
 
-            Log.Logger.Information("开始下载BepInEx...");
+            Log.Logger.Information("Starting BepInEx download...");
 
-            // 使用固定的稳定版本链接，避免GitHub API速率限制
-            // BepInEx 5.4.23.2 (2024年稳定版)
-            string downloadUrl;
-            string fileName;
-            
+            // Determine platform and get download URL
+            string platform;
             if (OperatingSystem.IsWindows())
-            {
-                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip";
-                fileName = "BepInEx_win_x64_5.4.23.2.zip";
-            }
+                platform = "windows";
             else if (OperatingSystem.IsLinux())
-            {
-                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_linux_x64_5.4.23.2.zip";
-                fileName = "BepInEx_linux_x64_5.4.23.2.zip";
-            }
+                platform = "linux";
             else if (OperatingSystem.IsMacOS())
-            {
-                downloadUrl = "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_macos_x64_5.4.23.2.zip";
-                fileName = "BepInEx_macos_x64_5.4.23.2.zip";
-            }
+                platform = "macos";
             else
-            {
-                throw new PlatformNotSupportedException("当前操作系统不受支持");
-            }
+                throw new PlatformNotSupportedException("Current operating system is not supported");
             
-            Log.Logger.Information("下载 {FileName} 从 {Url}", fileName, downloadUrl);
+            string downloadUrl = GameConfig.GetBepInExDownloadUrl(platform);
+            string fileName = GameConfig.GetBepInExFileName(platform);
+            
+            Log.Logger.Information("Downloading {FileName} from {Url}", fileName, downloadUrl);
 
-            // 下载BepInEx
+            // Download BepInEx
             var (data, _) = await DownloadFile(downloadUrl, progress =>
             {
                 setProgress(new ModProgressArgs { Download = progress });
             });
 
-            Log.Logger.Information("下载完成，开始解压到 {GameRoot}", gameRoot);
+            Log.Logger.Information("Download completed, extracting to {GameRoot}", gameRoot);
 
-            // 解压到游戏根目录
+            // Extract to game root directory
             ExtractZip(data, gameRoot);
             
-            // 列出解压后的文件结构（调试用）
+            // List extracted file structure (for debugging)
             var bepInExPath = Path.Combine(gameRoot, GameConfig.BepInExFolder);
             if (Directory.Exists(bepInExPath))
             {
-                Log.Logger.Information("BepInEx文件夹存在: {Path}", bepInExPath);
+                Log.Logger.Information("BepInEx folder exists: {Path}", bepInExPath);
                 var subdirs = Directory.GetDirectories(bepInExPath);
-                Log.Logger.Information("子目录: {Subdirs}", string.Join(", ", subdirs.Select(Path.GetFileName)));
+                Log.Logger.Information("Subdirectories: {Subdirs}", string.Join(", ", subdirs.Select(Path.GetFileName)));
             }
             else
             {
-                Log.Logger.Warning("BepInEx文件夹不存在: {Path}", bepInExPath);
+                Log.Logger.Warning("BepInEx folder does not exist: {Path}", bepInExPath);
             }
 
-            // 创建plugins目录（在验证前创建，因为验证不再检查plugins）
+            // Create plugins directory (before validation, as validation no longer checks for plugins)
             var pluginsPath = GameConfig.GetBepInExPluginsPath(gameRoot);
             _fs.Directory.CreateDirectory(pluginsPath);
-            Log.Logger.Information("创建plugins目录: {Path}", pluginsPath);
+            Log.Logger.Information("Created plugins directory: {Path}", pluginsPath);
 
-            // 验证安装
+            // Verify installation
             if (!GameConfig.IsBepInExInstalled(gameRoot))
             {
                 var corePath = Path.Combine(bepInExPath, GameConfig.BepInExCoreFolder);
                 var winhttpPath = Path.Combine(gameRoot, "winhttp.dll");
                 throw new InvalidOperationException(
-                    $"BepInEx解压后验证失败。\n" +
-                    $"BepInEx路径存在: {Directory.Exists(bepInExPath)}\n" +
-                    $"Core路径存在: {Directory.Exists(corePath)}\n" +
-                    $"winhttp.dll存在: {File.Exists(winhttpPath)}");
+                    $"BepInEx installation verification failed.\n" +
+                    $"BepInEx path exists: {Directory.Exists(bepInExPath)}\n" +
+                    $"Core path exists: {Directory.Exists(corePath)}\n" +
+                    $"winhttp.dll exists: {File.Exists(winhttpPath)}");
             }
             
-            Log.Logger.Information("BepInEx安装成功！");
+            Log.Logger.Information("BepInEx installed successfully!");
             
             setProgress(new ModProgressArgs { Completed = true });
         }
@@ -230,7 +219,7 @@ public class Installer : IInstaller
     }
 
     /// <summary>
-    /// 卸载BepInEx框架
+    /// Uninstall BepInEx framework
     /// </summary>
     public async Task UninstallBepInEx()
     {
@@ -243,16 +232,16 @@ public class Installer : IInstaller
 
             if (!_fs.Directory.Exists(bepInExPath))
             {
-                Log.Logger.Information("BepInEx未安装，无需卸载");
+                Log.Logger.Information("BepInEx not installed, nothing to uninstall");
                 return;
             }
 
-            Log.Logger.Information("卸载BepInEx从 {GameRoot}", gameRoot);
+            Log.Logger.Information("Uninstalling BepInEx from {GameRoot}", gameRoot);
             
-            // 删除BepInEx文件夹
+            // Delete BepInEx folder
             _fs.Directory.Delete(bepInExPath, true);
             
-            // 删除可能的其他BepInEx文件（如doorstop等）
+            // Delete possible other BepInEx files (like doorstop)
             var bepInExFiles = new[] 
             { 
                 "winhttp.dll",      // BepInEx 5.x doorstop
@@ -266,11 +255,11 @@ public class Installer : IInstaller
                 if (_fs.File.Exists(filePath))
                 {
                     _fs.File.Delete(filePath);
-                    Log.Logger.Information("删除BepInEx文件: {File}", file);
+                    Log.Logger.Information("Deleted BepInEx file: {File}", file);
                 }
             }
 
-            Log.Logger.Information("BepInEx卸载完成");
+            Log.Logger.Information("BepInEx uninstalled successfully");
         }
         finally
         {

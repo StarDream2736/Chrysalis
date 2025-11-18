@@ -28,6 +28,10 @@ public static class GameConfig
     public const string BepInExConfigFolder = "config";
     public const string BepInExCoreFolder = "core";
     
+    // BepInEx版本配置
+    public const string BepInExVersion = "5.4.23.2";
+    public const string BepInExBaseUrl = "https://github.com/BepInEx/BepInEx/releases/download";
+    
     // Assembly名称
     public const string MainAssembly = "Assembly-CSharp.dll";
     public const string UnityEngineAssembly = "UnityEngine.dll";
@@ -40,8 +44,50 @@ public static class GameConfig
     public const string FallbackModLinksUri = "https://cdn.jsdelivr.net/gh/YOUR-ORG/silksong-modlinks@latest/ModLinks.xml";
     public const string FallbackApiLinksUri = "https://cdn.jsdelivr.net/gh/YOUR-ORG/silksong-modlinks@latest/ApiLinks.xml";
     
-    // BepInEx下载地址（5.x最新版）
-    public const string BepInExDownloadUrl = "https://github.com/BepInEx/BepInEx/releases/latest";
+    /// <summary>
+    /// 获取BepInEx下载地址
+    /// </summary>
+    public static string GetBepInExDownloadUrl(string platform)
+    {
+        string fileName = platform.ToLowerInvariant() switch
+        {
+            "windows" => $"BepInEx_win_x64_{BepInExVersion}.zip",
+            "linux" => $"BepInEx_linux_x64_{BepInExVersion}.zip",
+            "macos" => $"BepInEx_macos_x64_{BepInExVersion}.zip",
+            _ => throw new PlatformNotSupportedException($"Platform '{platform}' is not supported")
+        };
+        return $"{BepInExBaseUrl}/v{BepInExVersion}/{fileName}";
+    }
+    
+    /// <summary>
+    /// 获取BepInEx文件名
+    /// </summary>
+    public static string GetBepInExFileName(string platform)
+    {
+        return platform.ToLowerInvariant() switch
+        {
+            "windows" => $"BepInEx_win_x64_{BepInExVersion}.zip",
+            "linux" => $"BepInEx_linux_x64_{BepInExVersion}.zip",
+            "macos" => $"BepInEx_macos_x64_{BepInExVersion}.zip",
+            _ => throw new PlatformNotSupportedException($"Platform '{platform}' is not supported")
+        };
+    }
+    
+    /// <summary>
+    /// 获取可能的游戏安装路径后缀
+    /// </summary>
+    public static string[] GetPathSuffixes()
+    {
+        return new[]
+        {
+            // Steam/GOG - Unity Data目录
+            Path.Combine(DataFolderName, ManagedFolderName),
+            // BepInEx路径（如果已安装BepInEx）
+            Path.Combine(BepInExFolder, BepInExCoreFolder),
+            // macOS
+            "Contents/Resources/Data/Managed"
+        };
+    }
     
     /// <summary>
     /// 获取BepInEx插件目录的完整路径

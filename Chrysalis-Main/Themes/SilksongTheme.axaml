@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style Selector="Window">
+        <Setter Property="Background">
+            <SolidColorBrush Color="#1A0A10" Opacity="0.95"/>
+        </Setter>
+    </Style>
+    
+    <Style Selector="Border.SilksongCard">
+        <Setter Property="Background" Value="#2D1520"/>
+        <Setter Property="BorderBrush" Value="#8B1538"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BoxShadow" Value="0 4 8 0 #4A0D1C"/>
+    </Style>
+    
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="#E8D5D9"/>
+    </Style>
+    
+    <Style Selector="TextBlock:pointerover">
+        <Setter Property="Foreground" Value="#FF2D55"/>
+    </Style>
+    
+    <Style Selector="ProgressBar">
+        <Setter Property="Foreground" Value="#C41E3A"/>
+        <Setter Property="Background" Value="#2D1520"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="#C41E3A"/>
+    </Style>
+</Styles>

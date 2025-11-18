@@ -46,6 +46,8 @@
                     Theme="{StaticResource CardBorder}"
                     Margin="5 0"
                     Padding="0"
+                    BorderBrush="{StaticResource AccentBrush}"
+                    BorderThickness="1"
                     Background="{DynamicResource TextBoxDefaultBackground}">
                     <DockPanel>
                         <i:Icon Margin=" 5 0 5 0" Value="fa-solid fa-magnifying-glass" />
@@ -100,18 +102,18 @@
                 </Grid>
 
                 <Button
-                    Grid.Column="3"
-                    Grid.Row="0"
-                    Margin="5 0"
-                    Classes="Primary"
-                    Theme="{DynamicResource SolidButton}"
-                    Width="140"
-                    Command="{Binding ToggleApi}"
-                    VerticalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        Grid.Column="3"
+                        Grid.Row="0"
+                        Margin="5 0"
+                        Classes="Primary"
+                        Theme="{DynamicResource SolidButton}"
+                        Width="140"
+                        Background="{StaticResource AccentBrush}"
+                        Command="{Binding ToggleApi}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
                         <i:Icon Value="fa-solid fa-power-off" />
                         <TextBlock Text="{Binding BepInExButtonText}" />
-                    </StackPanel>
+                        </StackPanel>
                 </Button>
 
                 <Button Classes="Primary"

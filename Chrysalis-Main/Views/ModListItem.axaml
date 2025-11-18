@@ -59,6 +59,8 @@
     <Border
         Padding="5 2"
         Margin="0"
+        BorderBrush="{StaticResource PrimaryBrush}"
+        BorderThickness="0 0 0 1"
         CornerRadius="{DynamicResource RadiusCardCornerRadius}">
         <Grid
             ColumnDefinitions="auto, *, auto, auto"
@@ -112,6 +114,7 @@
                     <Button
                         x:Name="InstallUpdateButton"
                         Width="90"
+                        Background="{StaticResource AccentBrush}"
                         CommandParameter="{Binding .}"
                         CornerRadius="3 0 0 3"
                         Command="{ReflectionBinding $parent[views:ModPageView].ViewModel.OnInstall}"

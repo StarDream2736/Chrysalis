@@ -159,25 +159,43 @@
         <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
     </Style>
     
-    <!-- ==================== 切换控件 ==================== -->
-    
-    <!-- ToggleSwitch 开关 -->
+    <!-- ToggleSwitch 开关 - 修复绿色问题 -->
     <Style Selector="ToggleSwitch">
         <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="OnContent" Value=""/>
+        <Setter Property="OffContent" Value=""/>
     </Style>
-    
+
+    <!-- 未选中状态 -->
     <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
         <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
     </Style>
-    
+
+    <Style Selector="ToggleSwitch /template/ Border#SwitchKnob">
+        <Setter Property="Background" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+
+    <!-- 选中状态 - 红色系 -->
     <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
         <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
     </Style>
-    
+
+    <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnob">
+        <Setter Property="Background" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+
+    <!-- 悬停状态 -->
     <Style Selector="ToggleSwitch:pointerover:checked /template/ Border#SwitchKnobBounds">
         <Setter Property="Background" Value="{StaticResource CrimsonBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrimsonBrush}"/>
     </Style>
-    
+
+    <Style Selector="ToggleSwitch:pointerover /template/ Border#SwitchKnobBounds">
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+
     <!-- RadioButton 单选按钮 -->
     <Style Selector="RadioButton">
         <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
@@ -319,6 +337,31 @@
     </Style>
     
     <!-- ==================== MenuFlyout 下拉菜单 ==================== -->
+
+    <!-- DropDownButton 下拉按钮箭头 -->
+    <Style Selector="DropDownButton">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+
+    <Style Selector="DropDownButton:pointerover">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+
+    <Style Selector="DropDownButton:pressed">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+    </Style>
+
+    <!-- 下拉按钮中的图标 -->
+    <Style Selector="DropDownButton /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+
+    <Style Selector="DropDownButton /template/ PathIcon">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
 
     <!-- MenuFlyout 的 Presenter -->
     <Style Selector="MenuFlyoutPresenter">

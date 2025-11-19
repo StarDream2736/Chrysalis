@@ -137,20 +137,21 @@
                         Margin="0"
                         Width="32"
                         Height="32"
-                        Background="#8B2D54"
-                        BorderBrush="#C75B7A"
+                        Background="{StaticResource WineRedBrush}"
+                        BorderBrush="{StaticResource RoseRedBrush}"
                         BorderThickness="1"
                         IsEnabled="{Binding Installed}"
                         VerticalAlignment="Center"
                         CornerRadius="0 6 6 0">
-                        <i:Icon Value="fa-solid fa-chevron-down" FontSize="10" Foreground="#D9A5B3"/>
+                        <!-- 修改图标颜色 -->
+                        <i:Icon Value="fa-solid fa-chevron-down" FontSize="10" Foreground="{StaticResource PaleRoseBrush}"/>
                         <DropDownButton.Flyout>
                             <MenuFlyout Placement="BottomEdgeAlignedRight">
                                 <MenuItem
                                     Header="Uninstall"
                                     CommandParameter="{Binding .}"
-                                    Background="#4A1230"
-                                    Foreground="#D9A5B3"
+                                    Background="{StaticResource DarkRedBrush}"
+                                    Foreground="{StaticResource PaleRoseBrush}"
                                     i:MenuItem.Icon="fa-solid fa-trash-can"
                                     Command="{ReflectionBinding $parent[views:ModPageView].ViewModel.OnUninstall}" />
                             </MenuFlyout>

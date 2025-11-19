@@ -17,14 +17,14 @@ jobs:
       run: dotnet restore -r win-x64
     - name: Build
       run: |
-        cd Scarab
+        cd Chrysalis-Main
         dotnet publish --no-restore -r win-x64 -p:PublishSingleFile=true -p:Configuration=Release --self-contained true
         cd ..
     - name: Upload Binary
       uses: actions/upload-artifact@v4
       with:
-        name: Scarab-Windows
-        path: Scarab/bin/Release/net8.0/win-x64/publish/
+        name: Chrysalis-Windows
+        path: Chrysalis-Main/bin/Release/net8.0/win-x64/publish/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -38,14 +38,14 @@ jobs:
       run: dotnet restore -r linux-x64
     - name: Build
       run: | 
-        cd Scarab
+        cd Chrysalis-Main
         dotnet publish -r linux-x64 -p:PublishSingleFile=true -p:Configuration=Release --self-contained true
         cd ..
     - name: Upload Binary
       uses: actions/upload-artifact@v4
       with:
-        name: Scarab-Linux
-        path: Scarab/bin/Release/net8.0/linux-x64/publish/
+        name: Chrysalis-Linux
+        path: Chrysalis-Main/bin/Release/net8.0/linux-x64/publish/
 
   build-macos:
     runs-on: macos-latest
@@ -61,15 +61,15 @@ jobs:
       run: dotnet restore -r osx-x64
     - name: Build
       run: |
-        cd Scarab
+        cd Chrysalis-Main
         dotnet publish --no-restore -r osx-x64 -p:PublishSingleFile=true -p:Configuration=Release --self-contained true
         cd ..
         mkdir out
-        python3 make_app.py Scarab.app Scarab/bin/Release/net8.0/osx-x64/publish
+        python3 make_app.py Chrysalis.app Chrysalis-Main/bin/Release/net8.0/osx-x64/publish
     - name: Upload Binary
       uses: actions/upload-artifact@v4
       with:
-        name: Scarab-MacOS
+        name: Chrysalis-MacOS
         path: out/mac.zip
 
   release:
@@ -86,10 +86,10 @@ jobs:
 
       - name: Zip
         run: |
-            zip -jr windows.zip ./artifacts/Scarab-Windows/*
+            zip -jr windows.zip ./artifacts/Chrysalis-Windows/*
 
-            chmod +x ./artifacts/Scarab-Linux/Scarab
-            zip -jr linux.zip ./artifacts/Scarab-Linux/*
+            chmod +x ./artifacts/Chrysalis-Linux/Chrysalis
+            zip -jr linux.zip ./artifacts/Chrysalis-Linux/*
 
       - name: Create release if a new tag is pushed
         uses: softprops/action-gh-release@v1
@@ -97,5 +97,5 @@ jobs:
           body: ${{ github.event.head_commit.message }}
           files: |
             ./windows.zip
-            ./artifacts/Scarab-MacOS/mac.zip
+            ./artifacts/Chrysalis-MacOS/mac.zip
             ./linux.zip

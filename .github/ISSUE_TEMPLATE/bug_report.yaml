@@ -9,19 +9,19 @@ body:
         Remember to check that your bug hasn't already been reported! 
         Note that specific mod bugs do *not* go here, and go to the appropriate mod's repository.
   - type: input
-    id: scarab-version
+    id: chrysalis-version
     attributes:
-      label: Scarab Version
-      description: "The version of Scarab you're using"
-      placeholder: "v1.14.0.0"
+      label: Chrysalis Version
+      description: "The version of Chrysalis you're using"
+      placeholder: "v0.1.0"
     validations:
       required: true
   - type: input
-    id: hk-version
+    id: silksong-version
     attributes:
-      label: Hollow Knight Version
-      description: "The version of Hollow Knight you're using, indicated in the bottom right of the title screen."
-      placeholder: "v1.5.78.11833"
+      label: Hollow Knight: Silksong Version
+      description: "The version of Hollow Knight: Silksong you're using, indicated in the bottom right of the title screen."
+      placeholder: "v1.0.0.0"
     validations:
       required: true
   - type: textarea
@@ -49,6 +49,6 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: Attach any logs, if any, here. You can find logs in `~/.config/HKModInstaller` or `%appdata%\HKModInstaller`. There may also be logs in the same folder as the `.exe` or `.app` If there are no logs, please write 'None' here. Note that in any case where the app crashed or indicated an error or exception there *will* be logs you should include located in the previously mentioned folder.
+      description: Attach any logs, if any, here. You can find logs in `~/.config/Chrysalis` or `%appdata%\Chrysalis`. There may also be logs in the same folder as the `.exe` or `.app` If there are no logs, please write 'None' here. Note that in any case where the app crashed or indicated an error or exception there *will* be logs you should include located in the previously mentioned folder.
     validations:
       required: true

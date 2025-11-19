@@ -3,31 +3,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:s="using:Chrysalis.ViewModels"
-        Width="850" Height="500"
+        Width="980" Height="650"
         x:Class="Chrysalis.Views.MainWindow"
         x:DataType="s:MainWindowViewModel"
         mc:Ignorable="d"
         Icon="/Assets/chrysalis.ico"
-        Title="Chrysalis">
+        Title="Chrysalis - Hollow Knight: Silksong Mod Manager"
+        Background="#2D0A1F">
+    
     <Design.DataContext>
         <s:MainWindowViewModel />
     </Design.DataContext>
-    <TabControl TabStripPlacement="Top" HorizontalAlignment="Stretch">
+    
+    <TabControl 
+        TabStripPlacement="Top" 
+        HorizontalAlignment="Stretch"
+        Background="#2D0A1F"
+        BorderThickness="0">
+        
+        <TabControl.Styles>
+            <Style Selector="TabItem">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Padding" Value="20 10"/>
+            </Style>
+        </TabControl.Styles>
+        
+        <!-- Mods 标签页 -->
         <TabItem x:Name="ModListTab" Header="Mods" HorizontalContentAlignment="Stretch">
             <StackPanel VerticalAlignment="Center" Spacing="25">
                 <TextBlock 
                     x:Name="InfoBlock" 
                     FontWeight="Bold" 
                     FontSize="20" 
+                    Foreground="#E85D75"
                     Text="{Binding InfoText}"
                     HorizontalAlignment="Center"
                     IsVisible="{Binding InfoText, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                <ProgressBar Theme="{DynamicResource ProgressRing}" Width="100" Height="100" IsIndeterminate="True" />
+                <ProgressBar 
+                    Theme="{DynamicResource ProgressRing}" 
+                    Width="100" 
+                    Height="100" 
+                    Foreground="#C75B7A"
+                    IsIndeterminate="True" />
             </StackPanel>
         </TabItem>
 
+        <!-- Settings 标签页 -->
         <TabItem x:Name="SettingsTab" Header="Settings" Content="{Binding SettingsPage, TargetNullValue=''}" />
 
+        <!-- About 标签页 -->
         <TabItem Header="About">
             <s:AboutViewModel />
         </TabItem>

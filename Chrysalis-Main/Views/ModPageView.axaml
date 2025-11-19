@@ -15,149 +15,237 @@
                                 x:DataType="viewModels:ModPageViewModel"
                                 d:DataContext="{x:Static mock:MockModPageViewModel.DesignInstance}"
                                 Name="UserControl">
-    <DockPanel>
-        <!-- We disable these because ReSharper doesn't support finding the themes classes/resources afaict -->
-        <!-- ReSharper disable Xaml.StyleClassNotFound -->
-        <!-- ReSharper disable Xaml.StaticResourceNotResolved -->
+    <DockPanel Background="#2D0A1F">
+        
+        <!-- 进度条 -->
         <ProgressBar
             DockPanel.Dock="Bottom"
-
-            MaxHeight="8"
-            MinHeight="8"
-
+            MaxHeight="6"
+            MinHeight="6"
             Name="Bar"
-
+            Background="#3D2832"
+            Foreground="#C75B7A"
+            BorderBrush="#6B4A5A"
+            BorderThickness="0"
             IsVisible="{Binding ProgressBarVisible}"
-
             IsIndeterminate="{Binding ProgressBarIndeterminate}"
-
             Minimum="0"
             Maximum="100"
             Value="{Binding Progress}" />
 
+        <!-- 顶部工具栏 -->
         <Border DockPanel.Dock="Top"
-                Margin="10 10 10 5">
+                Margin="12 12 12 8"
+                Background="#4A1230"
+                BorderBrush="#6B4A5A"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12">
             <Grid
                 ColumnDefinitions="500,*,Auto,Auto"
-                RowDefinitions="Auto, 5, Auto">
+                RowDefinitions="Auto, 8, Auto">
+                
+                <!-- 搜索框 -->
                 <Border
                     Grid.Row="0"
                     Grid.Column="0"
-                    Theme="{StaticResource CardBorder}"
-                    Margin="5 0"
+                    Margin="0"
                     Padding="0"
-                    BorderBrush="{StaticResource AccentBrush}"
+                    Background="#3D2832"
+                    BorderBrush="#8B2D54"
                     BorderThickness="1"
-                    Background="{DynamicResource TextBoxDefaultBackground}">
+                    CornerRadius="6">
                     <DockPanel>
-                        <i:Icon Margin=" 5 0 5 0" Value="fa-solid fa-magnifying-glass" />
+                        <i:Icon 
+                            Margin="10 0 8 0" 
+                            Value="fa-solid fa-magnifying-glass" 
+                            Foreground="#D9A5B3"
+                            VerticalAlignment="Center"/>
                         <TextBox
                             x:Name="Search"
                             Name="Search"
                             Watermark="{ext:Localize XAML_SearchMark}"
                             BorderThickness="0"
                             Background="Transparent"
+                            Foreground="#D9A5B3"
+                            CaretBrush="#E85D75"
                             Text="{Binding Search}" />
                     </DockPanel>
                 </Border>
+                
+                <!-- BepInEx 安装按钮 -->
+                <Button
+                    Grid.Column="3"
+                    Grid.Row="0"
+                    Margin="8 0 0 0"
+                    Classes="Primary"
+                    Width="150"
+                    Height="36"
+                    Background="#8B2D54"
+                    BorderBrush="#C75B7A"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Command="{Binding ToggleApi}"
+                    VerticalAlignment="Center">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#C75B7A"/>
+                        </Style>
+                        <Style Selector="Button:pressed">
+                            <Setter Property="Background" Value="#E85D75"/>
+                        </Style>
+                    </Button.Styles>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <i:Icon Value="fa-solid fa-power-off" Foreground="#D9A5B3"/>
+                        <TextBlock Text="{Binding BepInExButtonText}" Foreground="#D9A5B3" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- 过滤器 -->
                 <Grid Grid.Column="0"
                       Grid.Row="2"
                       ColumnDefinitions="auto, *">
                     <Border
                         Grid.Column="0"
-                        Margin="5 0"
+                        Margin="0"
                         VerticalAlignment="Center"
-                        Theme="{StaticResource RadioButtonGroupBorder}">
-                        <StackPanel Orientation="Horizontal">
+                        Background="#3D2832"
+                        BorderBrush="#6B4A5A"
+                        BorderThickness="1"
+                        CornerRadius="6">
+                        <StackPanel Orientation="Horizontal" Spacing="2" Margin="4">
                             <RadioButton
                                 Classes="Small"
                                 IsChecked="True"
-                                Theme="{DynamicResource ButtonRadioButton}"
-                                Content="{ext:Localize XAML_ModsFilter_All}" Command="{Binding SelectAll}" />
-                            <RadioButton Classes="Small"
-                                         Theme="{DynamicResource ButtonRadioButton}"
-                                         Content="{ext:Localize XAML_ModsFilter_Installed}"
-                                         Command="{Binding SelectInstalled}" />
-                            <RadioButton Classes="Small"
-                                         Theme="{DynamicResource ButtonRadioButton}"
-                                         Content="{ext:Localize XAML_ModsFilter_Enabled}"
-                                         Command="{Binding SelectEnabled}" />
-                            <RadioButton Classes="Small"
-                                         Theme="{DynamicResource ButtonRadioButton}"
-                                         Content="{ext:Localize XAML_ModsFilter_OutOfDate}"
-                                         Command="{Binding SelectUnupdated}" />
+                                Content="{ext:Localize XAML_ModsFilter_All}" 
+                                Command="{Binding SelectAll}"
+                                Foreground="#D9A5B3">
+                                <RadioButton.Styles>
+                                    <Style Selector="RadioButton:checked">
+                                        <Setter Property="Foreground" Value="#E85D75"/>
+                                    </Style>
+                                </RadioButton.Styles>
+                            </RadioButton>
+                            <RadioButton 
+                                Classes="Small"
+                                Content="{ext:Localize XAML_ModsFilter_Installed}"
+                                Command="{Binding SelectInstalled}"
+                                Foreground="#D9A5B3">
+                                <RadioButton.Styles>
+                                    <Style Selector="RadioButton:checked">
+                                        <Setter Property="Foreground" Value="#E85D75"/>
+                                    </Style>
+                                </RadioButton.Styles>
+                            </RadioButton>
+                            <RadioButton 
+                                Classes="Small"
+                                Content="{ext:Localize XAML_ModsFilter_Enabled}"
+                                Command="{Binding SelectEnabled}"
+                                Foreground="#D9A5B3">
+                                <RadioButton.Styles>
+                                    <Style Selector="RadioButton:checked">
+                                        <Setter Property="Foreground" Value="#E85D75"/>
+                                    </Style>
+                                </RadioButton.Styles>
+                            </RadioButton>
+                            <RadioButton 
+                                Classes="Small"
+                                Content="{ext:Localize XAML_ModsFilter_OutOfDate}"
+                                Command="{Binding SelectUnupdated}"
+                                Foreground="#D9A5B3">
+                                <RadioButton.Styles>
+                                    <Style Selector="RadioButton:checked">
+                                        <Setter Property="Foreground" Value="#E85D75"/>
+                                    </Style>
+                                </RadioButton.Styles>
+                            </RadioButton>
                         </StackPanel>
                     </Border>
 
-                    <!--TODO: Localize tags, Use a value converter? -->
+                    <!-- 标签过滤 -->
                     <ComboBox
                         Grid.Column="1"
-                        Margin="5 0"
+                        Margin="8 0 0 0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         x:Name="TagBox"
                         PlaceholderText="Filter Tags"
                         ItemsSource="{Binding Tags, Mode=OneWay}"
+                        Background="#3D2832"
+                        BorderBrush="#6B4A5A"
+                        Foreground="#D9A5B3"
+                        CornerRadius="6"
                         Classes="Small" />
                 </Grid>
 
-                <Button
-                        Grid.Column="3"
-                        Grid.Row="0"
-                        Margin="5 0"
-                        Classes="Primary"
-                        Theme="{DynamicResource SolidButton}"
-                        Width="140"
-                        Background="{StaticResource AccentBrush}"
-                        Command="{Binding ToggleApi}">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                        <i:Icon Value="fa-solid fa-power-off" />
-                        <TextBlock Text="{Binding BepInExButtonText}" />
-                        </StackPanel>
-                </Button>
-
-                <Button Classes="Primary"
-                        Theme="{DynamicResource SolidButton}"
-                        Grid.Column="2"
-                        Grid.Row="2"
-                        Margin=" 5 0"
-                        Command="{Binding OpenModsDirectory}"
-                        VerticalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <i:Icon Value="fa-regular fa-folder-open" />
-                        <TextBlock Text="Open Mods" />
+                <!-- 打开Mods文件夹按钮 -->
+                <Button 
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Margin="8 0"
+                    Height="36"
+                    Background="#8B2D54"
+                    BorderBrush="#C75B7A"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Command="{Binding OpenModsDirectory}"
+                    VerticalAlignment="Center">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#C75B7A"/>
+                        </Style>
+                    </Button.Styles>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <i:Icon Value="fa-regular fa-folder-open" Foreground="#D9A5B3"/>
+                        <TextBlock Text="Open Mods" Foreground="#D9A5B3"/>
                     </StackPanel>
                 </Button>
 
-                <Button Classes="Primary"
-                        Theme="{DynamicResource SolidButton}"
-                        Grid.Column="3"
-                        Grid.Row="2"
-                        Margin=" 5 0"
-                        IsEnabled="{Binding CanUpdateAll}"
-                        Command="{Binding UpdateAll}"
-                        VerticalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <i:Icon Value="fa-solid fa-rotate" />
-                        <TextBlock Text="Update All" />
+                <!-- 全部更新按钮 -->
+                <Button 
+                    Grid.Column="3"
+                    Grid.Row="2"
+                    Margin="0"
+                    Height="36"
+                    Background="#8B2D54"
+                    BorderBrush="#C75B7A"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    IsEnabled="{Binding CanUpdateAll}"
+                    Command="{Binding UpdateAll}"
+                    VerticalAlignment="Center">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#C75B7A"/>
+                        </Style>
+                        <Style Selector="Button:disabled">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Style>
+                    </Button.Styles>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <i:Icon Value="fa-solid fa-rotate" Foreground="#D9A5B3"/>
+                        <TextBlock Text="Update All" Foreground="#D9A5B3"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
 
+        <!-- 分隔线 -->
+        <Separator DockPanel.Dock="Top" Background="#6B4A5A" Margin="12 0"/>
 
-        <Separator DockPanel.Dock="Top" />
-
+        <!-- 主内容区 -->
         <SplitView
             Name="SplitView"
             DisplayMode="CompactInline"
             OpenPaneLength="510"
             PanePlacement="Left"
-            IsPaneOpen="True">
+            IsPaneOpen="True"
+            Background="#2D0A1F">
 
-            <!-- Details of the selected item -->
+            <!-- 右侧 Mod 详情 -->
             <views:ModDetailsView />
 
+            <!-- 左侧 Mod 列表 -->
             <SplitView.Pane>
                 <views:ModListView />
             </SplitView.Pane>

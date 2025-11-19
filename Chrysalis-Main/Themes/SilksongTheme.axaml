@@ -1,35 +1,459 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia">
     
-    <!-- 通用样式 - 仅在深色主题下应用 -->
+    <!-- ==================== 配色定义 ==================== -->
+    <Styles.Resources>
+        <!-- 主色调 - 优雅的暗红系 -->
+        <Color x:Key="SilksongDeepRed">#2D0A1F</Color>          <!-- 深红黑（主背景） -->
+        <Color x:Key="SilksongDarkRed">#4A1230</Color>          <!-- 暗红（卡片背景） -->
+        <Color x:Key="SilksongWineRed">#8B2D54</Color>          <!-- 酒红（主色） -->
+        <Color x:Key="SilksongRoseRed">#C75B7A</Color>          <!-- 玫瑰红（强调色） -->
+        <Color x:Key="SilksongCrimson">#E85D75</Color>          <!-- 绯红（高亮） -->
+        
+        <!-- 辅助色 - 优雅的中性色 -->
+        <Color x:Key="SilksongPaleRose">#D9A5B3</Color>         <!-- 淡玫瑰（文字） -->
+        <Color x:Key="SilksongSoftGray">#6B4A5A</Color>         <!-- 柔灰（边框） -->
+        <Color x:Key="SilksongMist">#3D2832</Color>             <!-- 薄雾（悬浮层） -->
+        
+        <!-- 功能色 -->
+        <Color x:Key="SilksongSuccess">#9D5C63</Color>          <!-- 成功（暗金红） -->
+        <Color x:Key="SilksongWarning">#D4757D</Color>          <!-- 警告（珊瑚红） -->
+        <Color x:Key="SilksongError">#A8424F</Color>            <!-- 错误（深玫红） -->
+        
+        <!-- 转换为画刷 -->
+        <SolidColorBrush x:Key="DeepRedBrush" Color="{StaticResource SilksongDeepRed}"/>
+        <SolidColorBrush x:Key="DarkRedBrush" Color="{StaticResource SilksongDarkRed}"/>
+        <SolidColorBrush x:Key="WineRedBrush" Color="{StaticResource SilksongWineRed}"/>
+        <SolidColorBrush x:Key="RoseRedBrush" Color="{StaticResource SilksongRoseRed}"/>
+        <SolidColorBrush x:Key="CrimsonBrush" Color="{StaticResource SilksongCrimson}"/>
+        <SolidColorBrush x:Key="PaleRoseBrush" Color="{StaticResource SilksongPaleRose}"/>
+        <SolidColorBrush x:Key="SoftGrayBrush" Color="{StaticResource SilksongSoftGray}"/>
+        <SolidColorBrush x:Key="MistBrush" Color="{StaticResource SilksongMist}"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SilksongSuccess}"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource SilksongWarning}"/>
+        <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource SilksongError}"/>
+    </Styles.Resources>
+
+    <!-- ==================== 基础样式覆盖 ==================== -->
+    
+    <!-- Window 主窗口 -->
     <Style Selector="Window">
-        <Setter Property="Background">
-            <SolidColorBrush Color="#1A0A10" Opacity="0.95"/>
-        </Setter>
+        <Setter Property="Background" Value="{StaticResource DeepRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
     </Style>
     
-    <Style Selector="Border.SilksongCard">
-        <Setter Property="Background" Value="#2D1520"/>
-        <Setter Property="BorderBrush" Value="#8B1538"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="BoxShadow" Value="0 4 8 0 #4A0D1C"/>
-    </Style>
-    
+    <!-- TextBlock 文本 -->
     <Style Selector="TextBlock">
-        <Setter Property="Foreground" Value="#E8D5D9"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
     </Style>
     
     <Style Selector="TextBlock:pointerover">
-        <Setter Property="Foreground" Value="#FF2D55"/>
+        <Setter Property="Foreground" Value="{StaticResource CrimsonBrush}"/>
     </Style>
     
-    <Style Selector="ProgressBar">
-        <Setter Property="Foreground" Value="#C41E3A"/>
-        <Setter Property="Background" Value="#2D1520"/>
+    <!-- Border 边框 -->
+    <Style Selector="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.15"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    
+    <!-- ==================== 按钮样式 ==================== -->
+    
+    <!-- 默认按钮 -->
+    <Style Selector="Button">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    
+    <Style Selector="Button:pointerover">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <Style Selector="Button:pressed">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+    </Style>
+    
+    <!-- Primary 按钮 -->
+    <Style Selector="Button.Primary">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Effect">
+            <DropShadowEffect 
+                BlurRadius="8" 
+                Color="#8B2D54" 
+                Opacity="0.3"
+                OffsetX="0" 
+                OffsetY="2"/>
+        </Setter>
+    </Style>
+    
+    <Style Selector="Button.Primary:pointerover">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
+    <Style Selector="Button.Primary:pressed">
+        <Setter Property="Background" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
+    <!-- ==================== 输入控件 ==================== -->
+    
+    <!-- TextBox 输入框 -->
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource CrimsonBrush}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <Style Selector="TextBox:focus">
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <Style Selector="TextBox:pointerover">
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <!-- ComboBox 下拉框 -->
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
+    </Style>
+    
+    <Style Selector="ComboBox:pointerover /template/ Border#Background">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <Style Selector="ComboBoxItem">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== 切换控件 ==================== -->
+    
+    <!-- ToggleSwitch 开关 -->
+    <Style Selector="ToggleSwitch">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
     </Style>
     
     <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
-        <Setter Property="Background" Value="#C41E3A"/>
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
     </Style>
+    
+    <Style Selector="ToggleSwitch:pointerover:checked /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
+    <!-- RadioButton 单选按钮 -->
+    <Style Selector="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="RadioButton:checked /template/ Ellipse#OuterEllipse">
+        <Setter Property="Stroke" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="Fill" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <Style Selector="RadioButton:checked /template/ Ellipse#CheckOuterEllipse">
+        <Setter Property="Fill" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
+    <!-- CheckBox 复选框 -->
+    <Style Selector="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
+    <!-- ==================== 列表控件 ==================== -->
+    
+    <!-- ListBox 列表 -->
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="{StaticResource DeepRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+    </Style>
+    
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+    </Style>
+    
+    <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== 滚动条 ==================== -->
+    
+    <Style Selector="ScrollBar">
+        <Setter Property="Background" Value="{StaticResource DeepRedBrush}"/>
+    </Style>
+    
+    <Style Selector="ScrollBar:vertical">
+        <Setter Property="Width" Value="8"/>
+    </Style>
+    
+    <Style Selector="ScrollBar:horizontal">
+        <Setter Property="Height" Value="8"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ RepeatButton">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb">
+        <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Margin" Value="2"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb:pointerover">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb:pressed">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== 进度控件 ==================== -->
+    
+    <!-- ProgressBar 进度条 -->
+    <Style Selector="ProgressBar">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource RoseRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
+    </Style>
+    
+    <Style Selector="ProgressBar:indeterminate /template/ Border#ProgressBarIndicator">
+        <Setter Property="Background">
+            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="{StaticResource SilksongWineRed}" Offset="0"/>
+                <GradientStop Color="{StaticResource SilksongCrimson}" Offset="0.5"/>
+                <GradientStop Color="{StaticResource SilksongWineRed}" Offset="1"/>
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+
+    <!-- ==================== TabControl 标签页 ==================== -->
+    
+    <Style Selector="TabControl">
+        <Setter Property="Background" Value="{StaticResource DeepRedBrush}"/>
+    </Style>
+    
+    <Style Selector="TabItem">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+    </Style>
+    
+    <Style Selector="TabItem:pointerover">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+    </Style>
+    
+    <Style Selector="TabItem:selected">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CrimsonBrush}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    
+    <!-- ==================== 其他控件 ==================== -->
+    
+    <!-- Separator 分隔线 -->
+    <Style Selector="Separator">
+        <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
+    </Style>
+    
+    <!-- ToolTip 提示 -->
+    <Style Selector="ToolTip">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== MenuFlyout 下拉菜单 ==================== -->
+
+    <!-- MenuFlyout 的 Presenter -->
+    <Style Selector="MenuFlyoutPresenter">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="4"/>
+    </Style>
+
+    <Style Selector="MenuItem">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+
+    <Style Selector="MenuItem:pointerover /template/ Border">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+
+    <Style Selector="MenuItem:selected /template/ Border">
+        <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== 自定义卡片样式 ==================== -->
+    
+    <Style Selector="Border.SilksongCard">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="12"/>
+        <Setter Property="Effect">
+            <DropShadowEffect 
+                BlurRadius="16" 
+                Color="#1A0000" 
+                Opacity="0.6"
+                OffsetX="0" 
+                OffsetY="6"/>
+        </Setter>
+    </Style>
+    
+    <Style Selector="Border.SilksongCard:pointerover">
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <!-- ==================== 通知样式 ==================== -->
+    
+    <!-- 通知卡片容器 -->
+    <Style Selector="Window.notificationCard">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    
+    <!-- 通知内容区域 -->
+    <Style Selector="Window.notificationCard Border">
+        <Setter Property="Background" Value="{StaticResource DarkRedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="16 12"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="Effect">
+            <DropShadowEffect BlurRadius="16" 
+                            Color="#000000" 
+                            Opacity="0.5"
+                            OffsetX="0" 
+                            OffsetY="4"/>
+        </Setter>
+    </Style>
+    
+    <!-- 通知文字 -->
+    <Style Selector="Window.notificationCard TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard TextBlock.Title">
+        <Setter Property="Foreground" Value="{StaticResource CrimsonBrush}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard TextBlock.Message">
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="MaxWidth" Value="300"/>
+    </Style>
+    
+    <!-- 成功通知 -->
+    <Style Selector="Window.notificationCard.success Border">
+        <Setter Property="BorderBrush" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard.success TextBlock.Title">
+        <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    
+    <!-- 错误通知 -->
+    <Style Selector="Window.notificationCard.error Border">
+        <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard.error TextBlock.Title">
+        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    
+    <!-- 信息通知 -->
+    <Style Selector="Window.notificationCard.information Border">
+        <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard.information TextBlock.Title">
+        <Setter Property="Foreground" Value="{StaticResource RoseRedBrush}"/>
+    </Style>
+    
+    <!-- 警告通知 -->
+    <Style Selector="Window.notificationCard.warning Border">
+        <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard.warning TextBlock.Title">
+        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    
+    <!-- 关闭按钮 -->
+    <Style Selector="Window.notificationCard Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource PaleRoseBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="CornerRadius" Value="4"/>
+    </Style>
+    
+    <Style Selector="Window.notificationCard Button:pointerover">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource CrimsonBrush}"/>
+    </Style>
+    
 </Styles>

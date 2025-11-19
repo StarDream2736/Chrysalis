@@ -2,94 +2,122 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:scarab="clr-namespace:Scarab"
         xmlns:vm="clr-namespace:Chrysalis.ViewModels"
         xmlns:mock="clr-namespace:Chrysalis.Mock"
         xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Chrysalis.Views.PathWindow"
-        Title="PathWindow"
+        Title="Select Game Path"
+        Background="#2D0A1F"
         d:DataContext="{x:Static mock:MockPathViewModel.DesignInstance}"
         x:DataType="vm:PathViewModel">
-    <Grid RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*,Auto" Margin="25">
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*,Auto" Margin="24">
+        
+        <!-- 标题 -->
         <TextBlock
             FontSize="24"
-            Margin="0 4 0 4"
-            Foreground="{DynamicResource ButtonDefaultPrimaryForeground}"
-            FontWeight="DemiBold">
+            Margin="0 0 0 16"
+            Foreground="#E85D75"
+            FontWeight="Bold">
             Unable to verify path!
         </TextBlock>
 
-        <!-- In the case we have no content for an expander -->
+        <!-- 验证信息块 -->
         <TextBlock
             Grid.Row="2"
             Grid.ColumnSpan="2"
-            Margin="1 2 0 0"
+            Margin="0 8 0 0"
             FontSize="16"
-            FontWeight="DemiBold"
+            FontWeight="SemiBold"
+            Foreground="#D9A5B3"
             Grid.Column="0"
             x:Name="VerificationBlock" />
             
-        <!-- Otherwise, we have an expander for showing files -->
+        <!-- 验证信息展开器 -->
         <Expander
             x:Name="VerificationExpander"
             Grid.Row="2"
             Grid.ColumnSpan="2"
             Grid.Column="0"
-            Margin="-11 0 0 0"
-            HorizontalAlignment="Stretch">
+            Margin="0 8 0 0"
+            HorizontalAlignment="Stretch"
+            Background="#4A1230"
+            BorderBrush="#6B4A5A"
+            BorderThickness="1"
+            CornerRadius="8">
             <Expander.Styles>
-                <Style Selector="Expander:down Border#ExpanderContent">
-                    <Setter Property="BorderThickness" Value="0" />
+                <Style Selector="Expander">
+                    <Setter Property="Foreground" Value="#D9A5B3"/>
+                </Style>
+                <Style Selector="Expander:expanded">
+                    <Setter Property="BorderBrush" Value="#8B2D54"/>
                 </Style>
             </Expander.Styles>
-            <StackPanel
-                x:Name="VerificationPanel">
+            
+            <StackPanel x:Name="VerificationPanel" Margin="12">
                 <StackPanel.Styles>
                     <Style Selector="i|Icon[(Grid.Column)=0]">
-                        <Setter Property="FontWeight" Value="DemiBold" />
-                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                    <Style Selector='i|Icon[Value=fa-solid fa-xmark]'>
-                        <Setter Property="Foreground" Value="{DynamicResource DataValidationErrorsForeground}" />
+                    <Style Selector='i|Icon[Value="fa-solid fa-xmark"]'>
+                        <Setter Property="Foreground" Value="#A8424F" />
                     </Style>
-                    <Style Selector="i|Icon[Value=fa-solid fa-check]">
-                        <Setter Property="Foreground" Value="{DynamicResource NotificationCardSuccessIconForeground}" />
+                    <Style Selector="i|Icon[Value='fa-solid fa-check']">
+                        <Setter Property="Foreground" Value="#9D5C63" />
                     </Style>
                     <Style Selector="TextBlock[(Grid.Column)=1]">
-                        <Setter Property="VerticalAlignment" Value="Stretch" />
-                        <Setter Property="Margin" Value="10 0 0 2" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="#D9A5B3"/>
+                        <Setter Property="Margin" Value="12 0 0 4" />
                     </Style>
                 </StackPanel.Styles>
             </StackPanel>
         </Expander>
 
+        <!-- 路径选择按钮 -->
         <StackPanel
             Grid.Column="0"
-            Grid.Row="3">
+            Grid.ColumnSpan="2"
+            Grid.Row="3"
+            Margin="0 16 0 0">
+            
             <Button
                 HorizontalContentAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
+                Height="48"
+                Background="#4A1230"
+                BorderBrush="#8B2D54"
+                BorderThickness="1"
+                CornerRadius="8"
                 Command="{Binding ChangePath}">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="#6B2D48"/>
+                    </Style>
+                </Button.Styles>
                 <DockPanel>
                     <TextBlock
                         HorizontalAlignment="Left"
                         DockPanel.Dock="Left"
                         FontWeight="SemiBold"
-                        Text="{Binding Selection}"
-                        Background="{DynamicResource ButtonBackground}" />
+                        Foreground="#D9A5B3"
+                        TextTrimming="CharacterEllipsis"
+                        Text="{Binding Selection}" />
                     <i:Icon
                         HorizontalAlignment="Right"
                         DockPanel.Dock="Right"
-                        Value="fa-regular fa-folder-open" />
+                        Value="fa-regular fa-folder-open"
+                        Foreground="#D9A5B3" />
                 </DockPanel>
             </Button>
 
             <TextBlock
-                Foreground="{DynamicResource DataValidationErrorsForeground}"
-                Margin="5 4 0 0"
-                Text="Select a valid path!" />
+                Foreground="#A8424F"
+                Margin="8 8 0 0"
+                FontWeight="SemiBold"
+                Text="⚠ Select a valid path!" />
         </StackPanel>
     </Grid>
 </Window>

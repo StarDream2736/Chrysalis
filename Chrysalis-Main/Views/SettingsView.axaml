@@ -1,4 +1,5 @@
-<reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:SettingsViewModel" xmlns="https://github.com/avaloniaui"
+<reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:SettingsViewModel" 
+                                xmlns="https://github.com/avaloniaui"
                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,66 +12,119 @@
                                 x:Class="Chrysalis.Views.SettingsView"
                                 x:DataType="viewModels:SettingsViewModel"
                                 d:DataContext="{x:Static mock:MockModPageViewModel.SettingsInstance}">
-    <StackPanel Margin="8">
-        <StackPanel.Styles>
-            <Style Selector="CheckBox">
-                <Setter Property="CornerRadius" Value="4" />
-            </Style>
-        </StackPanel.Styles>
-        <TextBlock FontWeight="Bold" FontSize="20" Margin="15 15 15 0">
-            Settings
-        </TextBlock>
-
-        <Grid ColumnDefinitions="Auto,Auto,*" RowDefinitions="*,*,*" Margin="20">
-            <Grid.Styles>
-                <Style Selector=":is(Control)">
-                    <Setter Property="Margin" Value="0 3 0 3" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                </Style>
-            </Grid.Styles>
-
-            <TextBlock Margin="0 0 10 0" FontWeight="Bold" Grid.Column="0" Grid.Row="0">
-                Current install path:
+    
+    <ScrollViewer Background="#2D0A1F">
+        <StackPanel Margin="24">
+            <TextBlock 
+                FontWeight="Bold" 
+                FontSize="28" 
+                Foreground="#E85D75"
+                Margin="0 0 0 24">
+                Settings
             </TextBlock>
 
-            <Button
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                Grid.Row="0"
-                HorizontalContentAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Command="{Binding ChangePath}">
-                <DockPanel>
-                    <TextBlock
-                        HorizontalAlignment="Left"
-                        DockPanel.Dock="Left"
-                        FontWeight="SemiBold"
-                        Text="{Binding Settings, Converter={x:Static conv:ISettingsConverters.ToBasePath}}"
-                        Background="{DynamicResource ButtonBackground}" />
-                    <i:Icon
-                        HorizontalAlignment="Right"
-                        DockPanel.Dock="Right"
-                        Value="fa-regular fa-folder-open" />
-                </DockPanel>
-            </Button>
+            <Border 
+                Background="#4A1230"
+                BorderBrush="#6B4A5A"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="20">
+                
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                    <Grid.Styles>
+                        <Style Selector="TextBlock.Label">
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Foreground" Value="#D9A5B3"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="0 0 16 8"/>
+                        </Style>
+                    </Grid.Styles>
 
-            <TextBlock Grid.Column="0" Grid.Row="1" FontWeight="Bold">
-                Language:
-            </TextBlock>
+                    <!-- 安装路径 -->
+                    <TextBlock 
+                        Classes="Label"
+                        Grid.Column="0" 
+                        Grid.Row="0">
+                        Install Path:
+                    </TextBlock>
 
-            <ComboBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Stretch"
-                Margin="0 0 0 0"
-                SelectedItem="{Binding Selected}"
-                ItemsSource="{Binding Languages}"
-                PlaceholderText="Locale" />
-            <CheckBox Grid.Column="1" Grid.Row="2">
-                Automatically remove dependencies when uninstalling mods
-            </CheckBox>
-        </Grid>
-    </StackPanel>
+                    <Button
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        HorizontalContentAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Height="40"
+                        Background="#3D2832"
+                        BorderBrush="#8B2D54"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Command="{Binding ChangePath}">
+                        <DockPanel>
+                            <i:Icon
+                                HorizontalAlignment="Right"
+                                DockPanel.Dock="Right"
+                                Value="fa-regular fa-folder-open"
+                                Foreground="#D9A5B3" />
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                DockPanel.Dock="Left"
+                                FontWeight="Normal"
+                                Foreground="#D9A5B3"
+                                TextTrimming="CharacterEllipsis"
+                                Text="{Binding Settings, Converter={x:Static conv:ISettingsConverters.ToBasePath}}" />
+                        </DockPanel>
+                    </Button>
+
+                    <!-- 语言设置 -->
+                    <TextBlock 
+                        Classes="Label"
+                        Grid.Column="0" 
+                        Grid.Row="1">
+                        Language:
+                    </TextBlock>
+
+                    <ComboBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        Height="40"
+                        Background="#3D2832"
+                        BorderBrush="#8B2D54"
+                        Foreground="#D9A5B3"
+                        CornerRadius="6"
+                        SelectedItem="{Binding Selected}"
+                        ItemsSource="{Binding Languages}"
+                        PlaceholderText="Select Language" />
+                    
+                    <!-- 自动移除依赖 -->
+                    <CheckBox 
+                        Grid.Column="1" 
+                        Grid.Row="2"
+                        Foreground="#D9A5B3">
+                        Automatically remove dependencies when uninstalling mods
+                    </CheckBox>
+                    
+                    <!-- 主题设置 -->
+                    <TextBlock 
+                        Classes="Label"
+                        Grid.Column="0" 
+                        Grid.Row="3">
+                        Theme:
+                    </TextBlock>
+                    
+                    <ComboBox 
+                        Grid.Column="1" 
+                        Grid.Row="3"
+                        HorizontalAlignment="Stretch"
+                        Height="40"
+                        Background="#3D2832"
+                        BorderBrush="#8B2D54"
+                        Foreground="#D9A5B3"
+                        CornerRadius="6"
+                        SelectedItem="{Binding Theme}"
+                        ItemsSource="{Binding Themes}" />
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </reactiveUi:ReactiveUserControl>

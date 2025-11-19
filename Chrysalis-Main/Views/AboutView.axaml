@@ -1,38 +1,118 @@
-<reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:AboutViewModel" xmlns="https://github.com/avaloniaui"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:mock="clr-namespace:Chrysalis.Mock"
-            xmlns:viewModels="clr-namespace:Chrysalis.ViewModels"
-            xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-            xmlns:reactiveUi="http://reactiveui.net"
-            mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-            x:DataType="viewModels:AboutViewModel"
-            x:Class="Chrysalis.Views.AboutView"
-            d:DataContext="{x:Static mock:MockModPageViewModel.AboutInstance}">
-    <Grid ColumnDefinitions="*,2*" RowDefinitions=".4*,3*,*" Margin="30">
-        <Image Grid.Column="0" Grid.RowSpan="3" Source="avares://Chrysalis/Assets/chrysalis.ico"
-               Margin="20 10 0 10" />
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="20 0 0 0" Spacing="10" VerticalAlignment="Center">
-            <TextBlock FontWeight="Bold" FontSize="70">Chrysalis
+<reactiveUi:ReactiveUserControl x:TypeArguments="viewModels:AboutViewModel" 
+                                xmlns="https://github.com/avaloniaui"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                xmlns:mock="clr-namespace:Chrysalis.Mock"
+                                xmlns:viewModels="clr-namespace:Chrysalis.ViewModels"
+                                xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                                x:DataType="viewModels:AboutViewModel"
+                                x:Class="Chrysalis.Views.AboutView"
+                                d:DataContext="{x:Static mock:MockModPageViewModel.AboutInstance}">
+    
+    <Grid 
+        ColumnDefinitions="*,2*" 
+        RowDefinitions=".4*,3*,*" 
+        Margin="40"
+        Background="#2D0A1F">
+        
+        <!-- Logo -->
+        <Viewbox Grid.Column="0" Grid.RowSpan="3" Margin="20">
+            <Border
+                Width="200"
+                Height="200"
+                CornerRadius="100"
+                BorderBrush="#8B2D54"
+                BorderThickness="3"
+                ClipToBounds="True">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Color="#C75B7A" Opacity="0.5"/>
+                </Border.Effect>
+                <Image Source="avares://Chrysalis/Assets/chrysalis.ico" />
+            </Border>
+        </Viewbox>
+        
+        <!-- 信息面板 -->
+        <StackPanel 
+            Grid.Row="1" 
+            Grid.Column="1" 
+            Margin="32 0 0 0" 
+            Spacing="16" 
+            VerticalAlignment="Center">
+            
+            <TextBlock 
+                FontWeight="Bold" 
+                FontSize="56"
+                Foreground="#E85D75">
+                Chrysalis
             </TextBlock>
-            <TextBlock Text="{Binding Version}" FontSize="20" />
-            <TextBlock Text="{x:Static viewModels:AboutViewModel.OSString}" FontSize="15" />
-            <TextBlock>
+            
+            <TextBlock 
+                Text="{Binding Version}" 
+                FontSize="18"
+                Foreground="#C75B7A" />
+            
+            <TextBlock 
+                Text="{x:Static viewModels:AboutViewModel.OSString}" 
+                FontSize="14"
+                Foreground="#D9A5B3" />
+            
+            <TextBlock
+                FontSize="14"
+                Foreground="#D9A5B3">
+                Mod Manager for Hollow Knight: Silksong
+            </TextBlock>
+            
+            <TextBlock
+                FontSize="12"
+                Foreground="#9D5C63">
                 Created by StarDream2736.
             </TextBlock>
-            <Separator Margin="0 5 0 5" />
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button DockPanel.Dock="Left" HorizontalAlignment="Left" Command="{Binding Donate}">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <i:Icon Value="fa-solid fa-hand-holding-dollar" />
-                        <TextBlock Text="Donate" />
+            
+            <Separator 
+                Margin="0 8"
+                Background="#6B4A5A"
+                Height="1"/>
+            
+            <!-- 按钮组 -->
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button 
+                    Command="{Binding Donate}"
+                    Background="#8B2D54"
+                    BorderBrush="#C75B7A"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Height="40"
+                    Padding="16 0">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#C75B7A"/>
+                        </Style>
+                    </Button.Styles>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <i:Icon Value="fa-solid fa-heart" Foreground="#D9A5B3"/>
+                        <TextBlock Text="Donate" Foreground="#D9A5B3"/>
                     </StackPanel>
                 </Button>
-                <Button DockPanel.Dock="Right" HorizontalAlignment="Left" Command="{Binding OpenLogs}">
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <i:Icon Value="fa-solid fa-book" />
-                        <TextBlock Text="Open Logs Folder" />
+                
+                <Button 
+                    Command="{Binding OpenLogs}"
+                    Background="#4A1230"
+                    BorderBrush="#8B2D54"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Height="40"
+                    Padding="16 0">
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="#6B2D48"/>
+                        </Style>
+                    </Button.Styles>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <i:Icon Value="fa-solid fa-folder-open" Foreground="#D9A5B3"/>
+                        <TextBlock Text="Open Logs" Foreground="#D9A5B3"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
+using Avalonia.Media;
 // Resources is a field in Avalonia UserControls, so alias it for brevity
 using Localization = Chrysalis.Resources;
 
@@ -32,48 +33,43 @@ public partial class ModPageView : ReactiveUserControl<ModPageViewModel>
     {
         Trace.TraceError($"Failed action {act} for {m?.Name ?? "null item"}, ex: {e}");
 
+        string title = $"Failed to {act}";
+        string message;
+
         switch (e)
         {
             case HttpRequestException:
             {
-                _notify?.Show(new Notification(
-                    $"Failed to {act} {m?.Name ?? string.Empty}!",
-                    string.Format(Localization.MLVM_DisplayNetworkError_Msgbox_Text, m?.Name ?? "the API"),
-                    NotificationType.Error
-                ));
-
+                message = string.Format(
+                    Localization.MLVM_DisplayNetworkError_Msgbox_Text, 
+                    m?.Name ?? "the API"
+                );
                 break;
             }
 
             case HashMismatchException hashEx:
             {
-                _notify?.Show(new Notification(
-                    $"Failed to {act} {m?.Name ?? string.Empty}!",
-                    string.Format(
-                        Localization.MLVM_DisplayHashMismatch_Msgbox_Text,
-                        hashEx.Name,
-                        hashEx.Actual,
-                        hashEx.Expected
-                    ),
-                    NotificationType.Error
-                ));
-
+                message = string.Format(
+                    Localization.MLVM_DisplayHashMismatch_Msgbox_Text,
+                    hashEx.Name,
+                    hashEx.Actual,
+                    hashEx.Expected
+                );
                 break;
             }
 
             default:
             {
-                // TODO: on click event.
-                _notify?.Show(new Notification(
-                    // TODO: stringify lmao
-                    $"Failed to {act} {m?.Name ?? string.Empty}!",
-                    e.ToString(),
-                    NotificationType.Error
-                ));
-
+                message = e.Message;
                 break;
             }
         }
+
+        _notify?.Show(new Notification(
+            title,
+            message,
+            NotificationType.Error
+        ));
     }
 
     private void OnComplete(ModPageViewModel.ModAction act, ModItem mod)
@@ -83,7 +79,6 @@ public partial class ModPageView : ReactiveUserControl<ModPageViewModel>
             ModPageViewModel.ModAction.Install => Localization.NOTIFY_Installed,
             ModPageViewModel.ModAction.Update => Localization.NOTIFY_Updated,
             ModPageViewModel.ModAction.Uninstall => Localization.NOTIFY_Uninstalled,
-            // We don't display notifications for toggling - but keep an explicit arm for the sake of total matching
             ModPageViewModel.ModAction.Toggle => throw new ArgumentOutOfRangeException(nameof(act), act, null),
             _ => throw new ArgumentOutOfRangeException(nameof(act), act, null)
         };
@@ -101,7 +96,11 @@ public partial class ModPageView : ReactiveUserControl<ModPageViewModel>
 
         var tl = TopLevel.GetTopLevel(this);
 
-        _notify = new WindowNotificationManager(tl) { MaxItems = 3 };
+        _notify = new WindowNotificationManager(tl) 
+        { 
+            MaxItems = 3,
+            Position = NotificationPosition.BottomRight
+        };
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)

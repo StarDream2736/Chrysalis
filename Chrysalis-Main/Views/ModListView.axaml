@@ -11,18 +11,34 @@
              x:DataType="viewModels:ModPageViewModel"
              d:DataContext="{x:Static mock:MockModPageViewModel.DesignInstance}"
              Name="UserControl">
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <ListBox SelectedItem="{Binding SelectedModItem}"
-                 ItemsSource="{Binding FilteredItems}"
-                 Margin="15 0">
+    
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#2D0A1F">
+        <ListBox 
+            SelectedItem="{Binding SelectedModItem}"
+            ItemsSource="{Binding FilteredItems}"
+            Margin="12"
+            Background="#2D0A1F"
+            BorderThickness="0">
+            
             <ListBox.Styles>
-                <!-- Change the selected color to a grey instead of blue -->
+                <!-- 选中项样式 -->
                 <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-                    <Setter Property="Background" Value="{DynamicResource ThemeBorderLowBrush}" />
+                    <Setter Property="Background" Value="#4A1230" />
                 </Style>
+                
+                <Style Selector="ListBoxItem:selected:focus /template/ ContentPresenter">
+                    <Setter Property="Background" Value="#6B2D48" />
+                </Style>
+                
+                <!-- 悬停样式 -->
+                <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="#3D2832" />
+                </Style>
+                
+                <!-- 间距 -->
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="0" />
-                    <Setter Property="Margin" Value="0 1" />
+                    <Setter Property="Margin" Value="0 2" />
                 </Style>
             </ListBox.Styles>
 

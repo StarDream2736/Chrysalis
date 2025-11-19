@@ -1,4 +1,5 @@
-<rx:ReactiveUserControl x:TypeArguments="models:ModItem" xmlns="https://github.com/avaloniaui"
+<rx:ReactiveUserControl x:TypeArguments="models:ModItem" 
+                        xmlns="https://github.com/avaloniaui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,25 +15,21 @@
                         x:Name="mli"
                         x:DataType="models:ModItem"
                         x:Class="Chrysalis.Views.ModListItem">
-    <UserControl.Resources>
-        <svg:SvgImage x:Key="Icon" Source="avares://Chrysalis/Assets/placeholder.svg" />
-    </UserControl.Resources>
     
     <UserControl.Styles>
         <Style Selector="#mli:installed">
             <Style Selector="^ i|Icon#InstallIcon">
                 <Setter Property="Value" Value="fa-solid fa-rotate" />
             </Style>
-
             <Style Selector="^ #InstallUpdateButton TextBlock">
                 <Setter Property="Text" Value="{ext:Localize XAML_Update}" />
             </Style>
-
         </Style>
 
         <Style Selector="#mli:updated">
             <Style Selector="^ Button#InstallUpdateButton">
                 <Setter Property="IsEnabled" Value="False" />
+                <Setter Property="Opacity" Value="0.6" />
             </Style>
         </Style>
 
@@ -40,7 +37,6 @@
             <Style Selector="^ i|Icon#InstallIcon">
                 <Setter Property="Value" Value="fa-solid fa-download" />
             </Style>
-
             <Style Selector="^ #InstallUpdateButton TextBlock">
                 <Setter Property="Text" Value="{ext:Localize MI_InstallText_NotInstalled}" />
             </Style>
@@ -48,40 +44,54 @@
     </UserControl.Styles>
 
     <Border
-        Padding="5 2"
-        Margin="0"
-        BorderBrush="{StaticResource PrimaryBrush}"
+        Padding="8 4"
+        Margin="2 1"
+        Background="#3D2832"
+        BorderBrush="#6B4A5A"
         BorderThickness="0 0 0 1"
-        CornerRadius="{DynamicResource RadiusCardCornerRadius}">
+        CornerRadius="6">
+        
+        <Border.Transitions>
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+            </Transitions>
+        </Border.Transitions>
+        
         <Grid
             ColumnDefinitions="auto, *, auto, auto"
             RowDefinitions="Auto"
             ShowGridLines="False">
 
+            <!-- Mod 图标 -->
             <Border
                 Grid.Row="0"
                 Grid.Column="0"
-                CornerRadius="5"
-                ClipToBounds="True">
-                <Panel Background="{DynamicResource ThemeBackgroundBrush}">
+                CornerRadius="6"
+                ClipToBounds="True"
+                BorderBrush="#8B2D54"
+                BorderThickness="1">
+                <Panel Background="#4A1230">
                     <Image
                         Source="{DynamicResource Icon}"
-                        Height="40"
-                        Width="40"
+                        Height="36"
+                        Width="36"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center" />
                 </Panel>
             </Border>
 
+            <!-- Mod 名称 -->
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="10 0"
+                Margin="12 0"
                 Text="{Binding Name}"
-                FontWeight="DemiBold"
+                FontWeight="SemiBold"
+                Foreground="#D9A5B3"
                 TextTrimming="CharacterEllipsis"
                 VerticalAlignment="Center" />
 
+            <!-- 启用开关 -->
             <ToggleSwitch
                 x:Name="EnableSwitch"
                 Grid.Row="0"
@@ -93,41 +103,54 @@
                 IsChecked="{Binding Enabled}"
                 IsEnabled="{Binding Installed}"
                 HorizontalAlignment="Center"
-                VerticalContentAlignment="Center">
+                VerticalContentAlignment="Center"
+                Margin="8 0">
             </ToggleSwitch>
 
+            <!-- 操作按钮组 -->
             <Border
                 Grid.Row="0"
                 Grid.Column="3">
 
-                <StackPanel Orientation="Horizontal" Spacing="0">
+                <StackPanel Orientation="Horizontal" Spacing="2">
 
+                    <!-- 安装/更新按钮 -->
                     <Button
                         x:Name="InstallUpdateButton"
                         Width="90"
-                        Background="{StaticResource AccentBrush}"
+                        Height="32"
+                        Background="#8B2D54"
+                        BorderBrush="#C75B7A"
+                        BorderThickness="1"
                         CommandParameter="{Binding .}"
-                        CornerRadius="3 0 0 3"
+                        CornerRadius="6 0 0 6"
                         Command="{ReflectionBinding $parent[views:ModPageView].ViewModel.OnInstall}"
                         VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="5">
-                            <i:Icon x:Name="InstallIcon" />
-                            <TextBlock />
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <i:Icon x:Name="InstallIcon" FontSize="12"/>
+                            <TextBlock Foreground="#D9A5B3" FontSize="12"/>
                         </StackPanel>
                     </Button>
 
+                    <!-- 更多选项按钮 -->
                     <DropDownButton
-                        Margin="2 0 0 0"
-                        Width="30"
+                        Margin="0"
+                        Width="32"
+                        Height="32"
+                        Background="#8B2D54"
+                        BorderBrush="#C75B7A"
+                        BorderThickness="1"
                         IsEnabled="{Binding Installed}"
-                        Height="31"
                         VerticalAlignment="Center"
-                        CornerRadius="0 3 3 0">
+                        CornerRadius="0 6 6 0">
+                        <i:Icon Value="fa-solid fa-chevron-down" FontSize="10" Foreground="#D9A5B3"/>
                         <DropDownButton.Flyout>
                             <MenuFlyout Placement="BottomEdgeAlignedRight">
                                 <MenuItem
                                     Header="Uninstall"
                                     CommandParameter="{Binding .}"
+                                    Background="#4A1230"
+                                    Foreground="#D9A5B3"
                                     i:MenuItem.Icon="fa-solid fa-trash-can"
                                     Command="{ReflectionBinding $parent[views:ModPageView].ViewModel.OnUninstall}" />
                             </MenuFlyout>

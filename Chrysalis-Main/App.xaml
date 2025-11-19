@@ -6,35 +6,23 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+    
     <Application.Resources>
-    <FontFamily x:Key="InterFont">avares://Avalonia.Fonts.Inter/Assets#Inter</FontFamily>
-    
-    <Color x:Key="SilksongPrimary">#8B1538</Color>      
-    <Color x:Key="SilksongAccent">#C41E3A</Color>       
-    <Color x:Key="SilksongDark">#4A0D1C</Color>           
-    <Color x:Key="SilksongHighlight">#FF2D55</Color>      
-    
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource SilksongPrimary}"/>
-    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource SilksongAccent}"/>
-    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource SilksongDark}"/>
-    <SolidColorBrush x:Key="HighlightBrush" Color="{StaticResource SilksongHighlight}"/>
+        <FontFamily x:Key="InterFont">avares://Avalonia.Fonts.Inter/Assets#Inter</FontFamily>
     </Application.Resources>
+    
     <Application.Styles>
-    <StyleInclude Source="avares://Chrysalis/Themes/SilksongTheme.axaml"/>
-    <SimpleTheme/> 
-    <semi:SemiTheme />
-    <Style Selector="Button.Primary">
-        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-    </Style>
-    <Style Selector="Button.Primary:pointerover">
-        <Setter Property="Background" Value="{StaticResource HighlightBrush}"/>
-    </Style>
-    <Style Selector="ProgressBar:indeterminate">
-        <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
-    </Style>
-    <Style Selector="Window">
-        <Setter Property="FontFamily" Value="{StaticResource InterFont}"/>
-    </Style>
+        <!-- 先加载基础主题 -->
+        <SimpleTheme/> 
+        <semi:SemiTheme />
+        
+        <!-- 再覆盖自定义主题 -->
+        <StyleInclude Source="avares://Chrysalis/Themes/SilksongTheme.axaml"/>
+        
+        <!-- 全局字体 -->
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="{StaticResource InterFont}"/>
+        </Style>
     </Application.Styles>
     
     <Application.RequestedThemeVariant>Dark</Application.RequestedThemeVariant>

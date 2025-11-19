@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Styling;
 using MsBox.Avalonia;
 using Chrysalis.Views;
 
@@ -19,6 +20,14 @@ public partial class SettingsViewModel : ViewModelBase
         "zh"
     };
 
+    public static ThemeVariant[] Themes => new[]
+    {
+        ThemeVariant.Dark,
+        ThemeVariant.Light
+    };
+
+    [Notify] 
+    private ThemeVariant _theme;
     public ReactiveCommand<Unit, Unit> ChangePath { get; }
 
     [Notify] 
@@ -32,6 +41,10 @@ public partial class SettingsViewModel : ViewModelBase
         Selected = settings.PreferredCulture;
 
         ChangePath = ReactiveCommand.CreateFromTask(ChangePathAsync);
+
+        _theme = settings.PreferredTheme == Models.Theme.Dark
+            ? ThemeVariant.Dark
+            : ThemeVariant.Light;
 
         this.ObservableForProperty(x => x.Selected)
             .Subscribe(o =>

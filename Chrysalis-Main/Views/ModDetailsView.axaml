@@ -17,139 +17,192 @@
              d:DesignHeight="550"
              d:DataContext="{x:Static mock:MockModPageViewModel.DesignInstance}"
              x:DataType="viewModels:ModPageViewModel">
+    
     <Border
         IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False}"
-        DataContext="{Binding SelectedModItem}">
+        DataContext="{Binding SelectedModItem}"
+        Background="#2D0A1F"
+        Padding="12">
+        
         <Grid
             Name="DetailsPanel"
-            Margin="10 0"
             RowDefinitions="Auto,Auto,*"
             ColumnDefinitions="*,Auto"
             x:DataType="models:ModItem">
             
+            <!-- Mod 名称 -->
             <TextBlock
                 Grid.Row="0"
                 Grid.Column="0"
                 Text="{Binding Name}"
-                FontSize="24"
-                FontWeight="Black"
-                Margin="0 15 0 5"
+                FontSize="26"
+                FontWeight="Bold"
+                Foreground="#E85D75"
+                Margin="0 0 0 8"
                 TextTrimming="CharacterEllipsis" />
             
-            <!-- Version -->
-            <StackPanel Grid.Column="0" Margin="0 0 0 8" Grid.Row="1">
-                <StackPanel.Styles>
-                    <Style Selector="TextBlock">
-                        <Setter Property="FontWeight" Value="Bold" />
-                        <Setter Property="FontSize" Value="16" />
-                    </Style>
-                </StackPanel.Styles>
-
-                <StackPanel x:Name="VersionBlock" Orientation="Horizontal">
-                    <StackPanel.Resources>
-                        <SolidColorBrush x:Key="Highlight" Color="#61AFEF" />
-                    </StackPanel.Resources>
-                    <StackPanel.Styles>
-                        <Style Selector="TextBlock.Update">
-                            <Setter Property="Foreground" Value="{DynamicResource Highlight}" />
-                            <Setter Property="Margin" Value="4 0 0 0" />
-                        </Style>
-                    </StackPanel.Styles>
-
-                    <TextBlock Text="{Binding VersionText}" />
-                    <TextBlock Classes="Update" IsVisible="{Binding UpdateAvailable}">
-                        <Run Text=" -> " />
-                        <Run Text="{Binding Version}" />
+            <!-- 版本信息 -->
+            <StackPanel Grid.Column="0" Margin="0 0 0 12" Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        Text="{Binding VersionText}" 
+                        FontWeight="SemiBold"
+                        FontSize="16"
+                        Foreground="#D9A5B3"/>
+                    
+                    <!-- 更新提示 -->
+                    <TextBlock 
+                        IsVisible="{Binding UpdateAvailable}"
+                        Foreground="#C75B7A"
+                        FontWeight="SemiBold"
+                        Margin="8 0 0 0">
+                        <Run Text=" → " />
+                        <Run Text="{Binding Version}" Foreground="#E85D75"/>
                     </TextBlock>
                 </StackPanel>
             </StackPanel>
             
-            <!-- Repository Button -->
+            <!-- Repository 按钮 -->
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="0 12 0 5"
-                FontSize="14"
-                Command="{Binding OpenRepository}"
-                Background="Transparent">
+                Margin="0 0 0 8"
+                FontSize="13"
+                Height="32"
+                Background="#4A1230"
+                BorderBrush="#8B2D54"
+                BorderThickness="1"
+                CornerRadius="6"
+                Command="{Binding OpenRepository}">
                 <Button.Styles>
-                    <Style Selector="StackPanel:pointerover TextBlock">
-                        <Setter Property="FontWeight" Value="ExtraBold" />
-                    </Style>
-                    <Style Selector="StackPanel:pointerover i|Icon">
-                        <Setter Property="FontSize" Value="15" />
+                    <Style Selector="Button:pointerover">
+                        <Setter Property="Background" Value="#6B2D48"/>
+                        <Setter Property="BorderBrush" Value="#C75B7A"/>
                     </Style>
                 </Button.Styles>
-                <Border BorderThickness="1">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock>Repository</TextBlock>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="Repository" Foreground="#D9A5B3"/>
                     <i:Icon
-                        Margin="5 0 0 0"
-                        Value="fa-solid fa-arrow-up-right-from-square" />
+                        FontSize="12"
+                        Value="fa-solid fa-arrow-up-right-from-square"
+                        Foreground="#D9A5B3" />
                 </StackPanel>
-                    </Border>
             </Button>
             
-            <TabControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <!-- 详情标签页 -->
+            <TabControl 
+                Grid.Row="2" 
+                Grid.Column="0" 
+                Grid.ColumnSpan="2"
+                Background="#2D0A1F"
+                BorderThickness="0">
+                
                 <TabControl.Styles>
                     <Style Selector="TabControl /template/ Panel">
-                        <Setter Property="Margin" Value="0 0 0 10" />
+                        <Setter Property="Margin" Value="0 0 0 12" />
+                    </Style>
+                    
+                    <Style Selector="TabItem">
+                        <Setter Property="Foreground" Value="#D9A5B3"/>
+                        <Setter Property="Background" Value="#3D2832"/>
+                        <Setter Property="BorderBrush" Value="#6B4A5A"/>
+                        <Setter Property="Padding" Value="16 8"/>
+                        <Setter Property="Margin" Value="0 0 4 0"/>
+                    </Style>
+                    
+                    <Style Selector="TabItem:pointerover">
+                        <Setter Property="Background" Value="#4A1230"/>
+                    </Style>
+                    
+                    <Style Selector="TabItem:selected">
+                        <Setter Property="Background" Value="#8B2D54"/>
+                        <Setter Property="Foreground" Value="#E85D75"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
                     </Style>
 
                     <Style Selector="ItemsControl.Bulleted">
                         <Setter Property="ItemTemplate">
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <i:Icon FontSize="6" Value="fa-solid fa-circle" VerticalAlignment="Center" />
-                                    <TextBlock Margin="4 0 0 0" Text="{Binding ., DataType={x:Type system:String}}"
-                                               VerticalAlignment="Center" />
+                                <StackPanel Orientation="Horizontal" Margin="0 4">
+                                    <i:Icon 
+                                        FontSize="8" 
+                                        Value="fa-solid fa-circle" 
+                                        Foreground="#C75B7A"
+                                        VerticalAlignment="Center" />
+                                    <TextBlock 
+                                        Margin="8 0 0 0" 
+                                        Text="{Binding ., DataType={x:Type system:String}}"
+                                        Foreground="#D9A5B3"
+                                        VerticalAlignment="Center" />
                                 </StackPanel>
                             </DataTemplate>
                         </Setter>
                     </Style>
                 </TabControl.Styles>
 
+                <!-- Description 标签 -->
                 <TabItem Header="Description">
-                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0 0 0 15" />
+                    <ScrollViewer>
+                        <TextBlock 
+                            Text="{Binding Description}" 
+                            TextWrapping="Wrap" 
+                            Foreground="#D9A5B3"
+                            LineHeight="22"
+                            Margin="0 8" />
+                    </ScrollViewer>
                 </TabItem>
 
+                <!-- Dependencies 标签 -->
                 <TabItem Header="{ext:Localize XAML_Dependencies}" IsVisible="{Binding !!Dependencies.Length}">
-                    <ItemsControl Classes="Bulleted" ItemsSource="{Binding Dependencies}" />
+                    <ScrollViewer>
+                        <ItemsControl Classes="Bulleted" ItemsSource="{Binding Dependencies}" />
+                    </ScrollViewer>
                 </TabItem>
 
+                <!-- Tags 标签 -->
                 <TabItem
                     Header="{ext:Localize XAML_Tags}"
                     IsVisible="{Binding Tags, Converter={x:Static conv:TagConverters.NonZero}}">
-                    <ItemsControl Classes="Bulleted"
-                                  ItemsSource="{Binding Tags, Converter={x:Static conv:TagConverters.AsStrings}}" />
+                    <ScrollViewer>
+                        <ItemsControl 
+                            Classes="Bulleted"
+                            ItemsSource="{Binding Tags, Converter={x:Static conv:TagConverters.AsStrings}}" />
+                    </ScrollViewer>
                 </TabItem>
 
+                <!-- Integrations 标签 -->
                 <TabItem
                     IsVisible="{Binding !!Integrations.Length}"
                     Header="{ext:Localize XAML_Integrations}">
-                    <ItemsControl Classes="Bulleted" ItemsSource="{Binding Integrations}" />
+                    <ScrollViewer>
+                        <ItemsControl Classes="Bulleted" ItemsSource="{Binding Integrations}" />
+                    </ScrollViewer>
                 </TabItem>
 
+                <!-- Authors 标签 -->
                 <TabItem
                     IsVisible="{Binding !!Authors.Length}"
                     Header="Authors">
-                    <ItemsControl Classes="Bulleted" ItemsSource="{Binding Authors}" />
+                    <ScrollViewer>
+                        <ItemsControl Classes="Bulleted" ItemsSource="{Binding Authors}" />
+                    </ScrollViewer>
                 </TabItem>
 
+                <!-- README 标签 -->
                 <TabItem Header="README" Name="ReadmeTab">
-                    <mdxaml:MarkdownScrollViewer ClipToBounds="True" Name="MdReadme">
-                        <!-- https://github.com/whistyun/Markdown.Avalonia/issues/156 :/ -->
+                    <mdxaml:MarkdownScrollViewer 
+                        ClipToBounds="True" 
+                        Name="MdReadme">
+                        
                         <mdxaml:MarkdownScrollViewer.MarkdownStyle>
                             <Style>
                                 <Style Selector=".Markdown_Avalonia_MarkdownViewer TextBlock.CodeBlock">
-                                    <Style.Setters>
-                                        <Setter Property="Foreground" Value="White" />
-                                    </Style.Setters>
+                                    <Setter Property="Foreground" Value="#D9A5B3" />
+                                    <Setter Property="Background" Value="#3D2832"/>
                                 </Style>
                                 <Style Selector=".Markdown_Avalonia_MarkdownViewer ctxt|CCode">
-                                    <Style.Setters>
-                                        <Setter Property="Foreground" Value="White" />
-                                    </Style.Setters>
+                                    <Setter Property="Foreground" Value="#E85D75" />
+                                    <Setter Property="Background" Value="#3D2832"/>
                                 </Style>
                             </Style>
                         </mdxaml:MarkdownScrollViewer.MarkdownStyle>
@@ -157,31 +210,31 @@
                         <mdxaml:MarkdownScrollViewer.Styles>
                             <Style Selector="ctxt|CTextBlock">
                                 <Setter Property="FontFamily" Value="{StaticResource InterFont}" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundColor}" />
+                                <Setter Property="Foreground" Value="#D9A5B3" />
                             </Style> 
                             
                             <Style Selector="ctxt|CTextBlock.Heading1">
-                                <Setter Property="FontSize" Value="22" />
-                                <Setter Property="FontWeight" Value="DemiBold" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundColor}" />
+                                <Setter Property="FontSize" Value="24" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Foreground" Value="#E85D75" />
                             </Style>
 
                             <Style Selector="ctxt|CTextBlock.Heading2">
-                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="FontSize" Value="20" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundColor}" />
+                                <Setter Property="Foreground" Value="#C75B7A" />
                             </Style>
 
                             <Style Selector="ctxt|CTextBlock.Heading3">
-                                <Setter Property="FontSize" Value="16" />
+                                <Setter Property="FontSize" Value="18" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundColor}" />
+                                <Setter Property="Foreground" Value="#C75B7A" />
                             </Style>
 
                             <Style Selector="ctxt|CTextBlock.Heading4">
-                                <Setter Property="FontSize" Value="14" />
+                                <Setter Property="FontSize" Value="16" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundColor}" />
+                                <Setter Property="Foreground" Value="#D9A5B3" />
                             </Style>
                         </mdxaml:MarkdownScrollViewer.Styles>
                     </mdxaml:MarkdownScrollViewer>

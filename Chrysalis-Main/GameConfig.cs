@@ -36,13 +36,13 @@ public static class GameConfig
     public const string MainAssembly = "Assembly-CSharp.dll";
     public const string UnityEngineAssembly = "UnityEngine.dll";
     
-    // ModLinks数据源（待建立）
-    public const string ModLinksUri = "https://raw.githubusercontent.com/YOUR-ORG/silksong-modlinks/main/ModLinks.xml";
-    public const string ApiLinksUri = "https://raw.githubusercontent.com/YOUR-ORG/silksong-modlinks/main/ApiLinks.xml";
+    // ModLinks数据源
+    public const string ModLinksUri = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ModLinks.xml";
+    public const string ApiLinksUri = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ApiLinks.xml";
     
     // 备用CDN
-    public const string FallbackModLinksUri = "https://cdn.jsdelivr.net/gh/YOUR-ORG/silksong-modlinks@latest/ModLinks.xml";
-    public const string FallbackApiLinksUri = "https://cdn.jsdelivr.net/gh/YOUR-ORG/silksong-modlinks@latest/ApiLinks.xml";
+    public const string FallbackModLinksUri = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@latest/ModLinks.xml";
+    public const string FallbackApiLinksUri = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@latest/ApiLinks.xml";
     
     /// <summary>
     /// 获取BepInEx下载地址

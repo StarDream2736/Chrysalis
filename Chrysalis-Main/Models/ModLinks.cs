@@ -6,7 +6,7 @@ namespace Chrysalis.Models;
 
 public static class SerializationConstants
 {
-    public const string NAMESPACE = "https://github.com/HollowKnight-Modding/HollowKnight.ModLinks/HollowKnight.ModManager";
+    public const string NAMESPACE = "https://github.com/silksong-modding/modlinks";
 }
 
 [Serializable]

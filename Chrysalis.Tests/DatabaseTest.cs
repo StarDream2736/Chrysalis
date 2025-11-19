@@ -14,10 +14,10 @@ public class DatabaseTest
     private static readonly string modlinks_xml = @"
             <?xml version=""1.0""?>
             <ModLinks
-                xmlns=""https://github.com/HollowKnight-Modding/HollowKnight.ModLinks/HollowKnight.ModManager""
+                xmlns=""https://github.com/silksong-modding/modlinks""
                 xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
                 xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
-                xsi:schemaLocation=""https://raw.githubusercontent.com/HollowKnight-Modding/HollowKnight.ModLinks/main/Schemas/ModLinks.xml""
+                xsi:schemaLocation=""https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/Schemas/ModLinks.xml""
             >
                 <Manifest>
                     <Name>QoL</Name>
@@ -57,10 +57,10 @@ public class DatabaseTest
     private static readonly string api_xml = @"
             <?xml version=""1.0""?>
             <ApiLinks
-                xmlns=""https://github.com/HollowKnight-Modding/HollowKnight.ModLinks/HollowKnight.ModManager""
+                xmlns=""https://github.com/silksong-modding/modlinks""
                 xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
                 xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
-                xsi:schemaLocation=""https://raw.githubusercontent.com/HollowKnight-Modding/HollowKnight.ModLinks/main/Schemas/ApiLinks.xml""
+                xsi:schemaLocation=""https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/Schemas/ApiLinks.xml""
             >
                 <Manifest>
                     <Version>63</Version>

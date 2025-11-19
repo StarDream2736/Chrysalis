@@ -1,5 +1,5 @@
 {
-  description = "A mod installer for Hollow Knight";
+  description = "A mod installer for Hollow Knight: Silksong";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -32,7 +32,7 @@
           nugetDeps = ./deps.json;
 
           meta = {
-            description = "Hollow Knight mod installer";
+            description = "Hollow Knight: Silksong mod installer";
             homepage = "https://github.com/fifty-six/Scarab";
             downloadPage = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";
             changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";

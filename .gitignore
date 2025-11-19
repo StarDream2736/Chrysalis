@@ -13,6 +13,11 @@ windows.zip
 mac.zip
 linux.zip
 
+# Test publish directories
+test-publish/
+*-publish/
+publish-test/
+
 # User-specific files
 *.rsuser
 *.suo

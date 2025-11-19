@@ -4,11 +4,11 @@ namespace Chrysalis.Services;
 
 public class ModDatabase : IModDatabase
 {
-    private const string MODLINKS_URI = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ModLinks.xml";
-    private const string APILINKS_URI = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ApiLinks.xml";
+    private const string MODLINKS_URI = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@main/ModLinks.xml";
+    private const string APILINKS_URI = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@main/ApiLinks.xml";
         
-    private const string FALLBACK_MODLINKS_URI = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@latest/ModLinks.xml";
-    private const string FALLBACK_APILINKS_URI = "https://cdn.jsdelivr.net/gh/StarDream2736/silksong-modlinks@latest/ApiLinks.xml";
+    private const string FALLBACK_MODLINKS_URI = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ModLinks.xml";
+    private const string FALLBACK_APILINKS_URI = "https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/ApiLinks.xml";
 
     public (Links Link, int Version) Api { get; }
 

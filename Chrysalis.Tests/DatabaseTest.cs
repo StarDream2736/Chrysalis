@@ -14,7 +14,7 @@ public class DatabaseTest
     private static readonly string modlinks_xml = @"
             <?xml version=""1.0""?>
             <ModLinks
-                xmlns=""https://github.com/silksong-modding/modlinks""
+                xmlns=""https://github.com/StarDream2736/silksong-modlinks""
                 xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
                 xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
                 xsi:schemaLocation=""https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/Schemas/ModLinks.xml""
@@ -57,7 +57,7 @@ public class DatabaseTest
     private static readonly string api_xml = @"
             <?xml version=""1.0""?>
             <ApiLinks
-                xmlns=""https://github.com/silksong-modding/modlinks""
+                xmlns=""https://github.com/StarDream2736/silksong-modlinks""
                 xmlns:xsd=""http://www.w3.org/2001/XMLSchema""
                 xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
                 xsi:schemaLocation=""https://raw.githubusercontent.com/StarDream2736/silksong-modlinks/main/Schemas/ApiLinks.xml""

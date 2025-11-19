@@ -6,7 +6,7 @@ namespace Chrysalis.Models;
 
 public static class SerializationConstants
 {
-    public const string NAMESPACE = "https://github.com/silksong-modding/modlinks";
+    public const string NAMESPACE = "https://github.com/StarDream2736/silksong-modlinks";
 }
 
 [Serializable]

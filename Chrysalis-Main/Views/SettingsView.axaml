@@ -30,13 +30,13 @@
                 CornerRadius="8"
                 Padding="20">
                 
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
                     <Grid.Styles>
                         <Style Selector="TextBlock.Label">
                             <Setter Property="FontWeight" Value="SemiBold"/>
                             <Setter Property="Foreground" Value="#D9A5B3"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="0 0 16 8"/>
+                            <Setter Property="Margin" Value="0 0 16 0"/>
                         </Style>
                     </Grid.Styles>
 
@@ -44,13 +44,15 @@
                     <TextBlock 
                         Classes="Label"
                         Grid.Column="0" 
-                        Grid.Row="0">
+                        Grid.Row="0"
+                        Margin="0 0 16 16">
                         Install Path:
                     </TextBlock>
 
                     <Button
                         Grid.Column="1"
                         Grid.Row="0"
+                        Margin="0 0 0 16"
                         HorizontalContentAlignment="Stretch"
                         HorizontalAlignment="Stretch"
                         Height="40"
@@ -79,13 +81,15 @@
                     <TextBlock 
                         Classes="Label"
                         Grid.Column="0" 
-                        Grid.Row="1">
+                        Grid.Row="1"
+                        Margin="0 0 16 16">
                         Language:
                     </TextBlock>
 
                     <ComboBox
                         Grid.Row="1"
                         Grid.Column="1"
+                        Margin="0 0 0 16"
                         HorizontalAlignment="Stretch"
                         Height="40"
                         Background="#3D2832"
@@ -103,26 +107,6 @@
                         Foreground="#D9A5B3">
                         Automatically remove dependencies when uninstalling mods
                     </CheckBox>
-                    
-                    <!-- 主题设置 -->
-                    <TextBlock 
-                        Classes="Label"
-                        Grid.Column="0" 
-                        Grid.Row="3">
-                        Theme:
-                    </TextBlock>
-                    
-                    <ComboBox 
-                        Grid.Column="1" 
-                        Grid.Row="3"
-                        HorizontalAlignment="Stretch"
-                        Height="40"
-                        Background="#3D2832"
-                        BorderBrush="#8B2D54"
-                        Foreground="#D9A5B3"
-                        CornerRadius="6"
-                        SelectedItem="{Binding Theme}"
-                        ItemsSource="{Binding Themes}" />
                 </Grid>
             </Border>
         </StackPanel>

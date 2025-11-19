@@ -79,7 +79,7 @@
                     Grid.Row="0"
                     Margin="8 0 0 0"
                     Classes="Primary"
-                    Width="150"
+                    Width="180"
                     Height="36"
                     Background="#8B2D54"
                     BorderBrush="#C75B7A"
@@ -87,14 +87,6 @@
                     CornerRadius="6"
                     Command="{Binding ToggleApi}"
                     VerticalAlignment="Center">
-                    <Button.Styles>
-                        <Style Selector="Button:pointerover">
-                            <Setter Property="Background" Value="#C75B7A"/>
-                        </Style>
-                        <Style Selector="Button:pressed">
-                            <Setter Property="Background" Value="#E85D75"/>
-                        </Style>
-                    </Button.Styles>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <i:Icon Value="fa-solid fa-power-off" Foreground="#D9A5B3"/>
                         <TextBlock Text="{Binding BepInExButtonText}" Foreground="#D9A5B3" FontWeight="SemiBold"/>

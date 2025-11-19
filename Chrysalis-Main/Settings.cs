@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text.Json;
-using Avalonia.Styling;
 using Microsoft.Win32;
 
 namespace Chrysalis;
@@ -32,8 +31,6 @@ public class Settings : ISettings
     public GamePlatform Platform { get; set; } = GetDefaultPlatform();
 
     public string PreferredCulture { get; set; } = CultureInfo.CurrentUICulture.Name;
-
-    public Theme PreferredTheme { get; set; } = Theme.Dark;
     
     private static GamePlatform GetDefaultPlatform()
     {
@@ -288,8 +285,6 @@ public class Settings : ISettings
     public void Apply()
     {
         Debug.Assert(Application.Current is not null);
-        
-        Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
         
         LocalizeExtension.ChangeLanguage(new CultureInfo(PreferredCulture));
     }

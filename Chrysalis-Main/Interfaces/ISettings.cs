@@ -9,8 +9,6 @@ public interface ISettings
     string ManagedFolder { get; set; }
         
     string PreferredCulture { get; set; }
-    
-    Theme PreferredTheme { get; set; }
         
     /// <summary>
     /// 获取游戏根目录（从Managed文件夹向上两级）

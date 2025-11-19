@@ -35,6 +35,7 @@ public static class MockModPageViewModel
             
             var installer = A.Fake<IInstaller>();
             
+#pragma warning disable CS0618
             A.CallTo(() => installer.ToggleApi())
              .ReturnsLazily(
                  () =>
@@ -57,6 +58,7 @@ public static class MockModPageViewModel
                      return Task.CompletedTask;
                  }
              );
+#pragma warning restore CS0618
 
             var db = new MockDatabase();
 

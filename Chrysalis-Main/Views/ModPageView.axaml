@@ -73,25 +73,81 @@
                     </DockPanel>
                 </Border>
                 
-                <!-- BepInEx 安装按钮 -->
-                <Button
+                <!-- BepInEx 安装按钮组 -->
+                <StackPanel
                     Grid.Column="3"
                     Grid.Row="0"
-                    Margin="8 0 0 0"
-                    Classes="Primary"
-                    Width="180"
-                    Height="36"
-                    Background="#8B2D54"
-                    BorderBrush="#C75B7A"
-                    BorderThickness="1"
-                    CornerRadius="6"
-                    Command="{Binding ToggleApi}"
-                    VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <i:Icon Value="fa-solid fa-power-off" Foreground="#D9A5B3"/>
-                        <TextBlock Text="{Binding BepInExButtonText}" Foreground="#D9A5B3" FontWeight="SemiBold"/>
-                    </StackPanel>
-                </Button>
+                    Orientation="Horizontal"
+                    Spacing="0"
+                    Margin="8 0 0 0">
+                    
+                    <!-- 主按钮 -->
+                    <Button
+                        Width="168"
+                        Height="36"
+                        Background="#8B2D54"
+                        BorderBrush="#C75B7A"
+                        BorderThickness="1,1,0,1"
+                        CornerRadius="6,0,0,6"
+                        Command="{Binding ToggleApi}"
+                        VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <i:Icon Value="fa-solid fa-power-off" Foreground="#D9A5B3"/>
+                            <TextBlock Text="{Binding BepInExButtonText}" Foreground="#D9A5B3" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <!-- 下拉菜单按钮 -->
+                    <DropDownButton
+                        Width="32"
+                        Height="36"
+                        Background="#8B2D54"
+                        BorderBrush="#C75B7A"
+                        BorderThickness="1"
+                        CornerRadius="0,6,6,0"
+                        VerticalAlignment="Center">
+                        <i:Icon Value="fa-solid fa-chevron-down" FontSize="10" Foreground="#D9A5B3"/>
+                        <DropDownButton.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedRight">
+                                <!-- 版本信息 -->
+                                <MenuItem
+                                    Header="{Binding BepInExVersionInfo}"
+                                    IsEnabled="False"
+                                    Background="#4A1230"
+                                    Foreground="#D9A5B3">
+                                    <MenuItem.Icon>
+                                        <i:Icon Value="fa-solid fa-info-circle" Foreground="#D9A5B3"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                
+                                <Separator Background="#6B4A5A"/>
+                                
+                                <!-- 检查更新 -->
+                                <MenuItem
+                                    Header="Check for Updates"
+                                    Command="{Binding $parent[views:ModPageView].ViewModel.CheckBepInExUpdateCommand}"
+                                    Background="#4A1230"
+                                    Foreground="#D9A5B3">
+                                    <MenuItem.Icon>
+                                        <i:Icon Value="fa-solid fa-rotate" Foreground="#D9A5B3"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                
+                                <!-- 重新安装（仅已安装时显示） -->
+                                <MenuItem
+                                    Header="Reinstall BepInEx"
+                                    Command="{Binding $parent[views:ModPageView].ViewModel.ReinstallBepInExCommand}"
+                                    IsVisible="{Binding $parent[views:ModPageView].ViewModel.IsBepInExInstalled}"
+                                    Background="#4A1230"
+                                    Foreground="#D9A5B3">
+                                    <MenuItem.Icon>
+                                        <i:Icon Value="fa-solid fa-arrows-rotate" Foreground="#D9A5B3"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                </StackPanel>
 
                 <!-- 过滤器 -->
                 <Grid Grid.Column="0"

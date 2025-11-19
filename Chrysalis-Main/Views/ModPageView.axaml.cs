@@ -74,20 +74,47 @@ public partial class ModPageView : ReactiveUserControl<ModPageViewModel>
 
     private void OnComplete(ModPageViewModel.ModAction act, ModItem mod)
     {
-        string act_s = act switch
+        // BepInEx 特殊通知（标题就是传入的名称）
+        bool isBepInExNotification = mod.Name != "BepInEx" && 
+            (mod.Name.Contains("发现新版本") || 
+            mod.Name.Contains("已是最新") || 
+            mod.Name.Contains("提示") || 
+            mod.Name.Contains("错误"));
+        
+        string title;
+        string message;
+        NotificationType notifType;
+        
+        if (isBepInExNotification)
         {
-            ModPageViewModel.ModAction.Install => Localization.NOTIFY_Installed,
-            ModPageViewModel.ModAction.Update => Localization.NOTIFY_Updated,
-            ModPageViewModel.ModAction.Uninstall => Localization.NOTIFY_Uninstalled,
-            ModPageViewModel.ModAction.Toggle => throw new ArgumentOutOfRangeException(nameof(act), act, null),
-            _ => throw new ArgumentOutOfRangeException(nameof(act), act, null)
-        };
+            // BepInEx 更新检查通知
+            title = mod.Name;
+            message = mod.Description;
+            
+            notifType = title.Contains("错误") ? NotificationType.Error
+                : title.Contains("发现新版本") ? NotificationType.Warning
+                : title.Contains("已是最新") ? NotificationType.Success
+                : NotificationType.Information;
+        }
+        else
+        {
+            // 普通 Mod 操作通知
+            title = "Success!";
+            
+            string act_s = act switch
+            {
+                ModPageViewModel.ModAction.Install => Localization.NOTIFY_Installed,
+                ModPageViewModel.ModAction.Update => Localization.NOTIFY_Updated,
+                ModPageViewModel.ModAction.Uninstall => Localization.NOTIFY_Uninstalled,
+                ModPageViewModel.ModAction.Toggle => "",
+                _ => throw new ArgumentOutOfRangeException(nameof(act), act, null)
+            };
+            
+            message = string.IsNullOrEmpty(act_s) ? mod.Description : $"{act_s} {mod.Name}!";
+            notifType = NotificationType.Success;
+        }
 
-        _notify?.Show(new Notification(
-            "Success!",
-            $"{act_s} {mod.Name}!",
-            NotificationType.Success
-        ));
+        _notify?.Show(new Notification(title, message, notifType));
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

@@ -46,6 +46,8 @@ public partial class ModPageViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> ToggleApi { get; }
     public ReactiveCommand<Unit, Unit> ReinstallApi { get; }
     public ReactiveCommand<Unit, Unit> UpdateApi { get; }
+    public ReactiveCommand<Unit, Unit> CheckBepInExUpdateCommand { get; }
+    public ReactiveCommand<Unit, Unit> ReinstallBepInExCommand { get; }
 
     public ReactiveCommand<ModItem, Unit> OnUpdate    { get; }
     public ReactiveCommand<ModItem, Unit> OnInstall   { get; }
@@ -88,6 +90,29 @@ public partial class ModPageViewModel : ViewModelBase
     public bool IsBepInExInstalled => GameConfig.IsBepInExInstalled(_settings.GameRootFolder);
     public string BepInExButtonText => IsBepInExInstalled ? "Uninstall BepInEx" : "Install BepInEx";
     
+    [Notify]
+    private string? _bepInExInstalledVersion;
+    
+    [Notify]
+    private string? _bepInExLatestVersion;
+    
+    [Notify]
+    private bool _bepInExHasUpdate;
+    
+    public string BepInExVersionInfo
+    {
+        get
+        {
+            if (!IsBepInExInstalled)
+                return "Not Installed";
+            if (_bepInExInstalledVersion == null)
+                return "Installed";
+            return _bepInExHasUpdate 
+                ? $"v{_bepInExInstalledVersion} → v{_bepInExLatestVersion} Available" 
+                : $"v{_bepInExInstalledVersion} (Latest)";
+        }
+    }
+    
     // 鍏煎灞炴€э紙鐢ㄤ簬BepInEx锛?
     public ModState Api => IsBepInExInstalled ? new InstalledState(true, new Version(1, 0), true) : new NotInstalledState();
     public bool ApiOutOfDate => false; // BepInEx涓嶉渶瑕侀€氳繃绋嬪簭鏇存柊
@@ -125,6 +150,8 @@ public partial class ModPageViewModel : ViewModelBase
         UpdateApi = ReactiveCommand.CreateFromTask(UpdateApiAsync);
         ReinstallApi = ReactiveCommand.CreateFromTask(ReinstallApiAsync);
         UpdateAll = ReactiveCommand.CreateFromTask(UpdateAllAsync);
+        CheckBepInExUpdateCommand = ReactiveCommand.CreateFromTask(async () => await CheckBepInExUpdateWithFeedbackAsync());
+        ReinstallBepInExCommand = ReactiveCommand.CreateFromTask(ReinstallBepInExAsync);
 
         OnUpdate = ReactiveCommand.CreateFromTask<ModItem>(OnUpdateAsync);
         OnInstall = ReactiveCommand.CreateFromTask<ModItem>(OnInstallAsync);
@@ -141,6 +168,13 @@ public partial class ModPageViewModel : ViewModelBase
         
         // 启动时检测BepInEx安装状态
         CheckBepInExStatus();
+        
+        // 自动检查 BepInEx 更新
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(2000); // 延迟2秒后检查，避免阻塞启动
+            await CheckBepInExUpdateAsync();
+        });
     }
 
     /// <summary>
@@ -151,6 +185,149 @@ public partial class ModPageViewModel : ViewModelBase
         RaisePropertyChanged(nameof(IsBepInExInstalled));
         RaisePropertyChanged(nameof(BepInExButtonText));
         RaisePropertyChanged(nameof(Api));
+        RaisePropertyChanged(nameof(BepInExVersionInfo));
+    }
+    
+    /// <summary>
+    /// 检查 BepInEx 更新
+    /// </summary>
+    public async Task CheckBepInExUpdateAsync()
+    {
+        try
+        {
+            var (installed, latest, hasUpdate) = await _installer.CheckBepInExUpdate();
+            
+            BepInExInstalledVersion = installed?.ToString();
+            BepInExLatestVersion = latest.ToString();
+            BepInExHasUpdate = hasUpdate;
+            
+            RaisePropertyChanged(nameof(BepInExVersionInfo));
+            
+            _logger.LogInformation(
+                "BepInEx update check completed: Installed={Installed}, Latest={Latest}, HasUpdate={HasUpdate}",
+                BepInExInstalledVersion ?? "None",
+                BepInExLatestVersion,
+                BepInExHasUpdate);
+            
+            // 添加MessageBox反馈（只在手动触发时显示）
+            // 自动检查时不显示弹窗
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to check BepInEx update");
+        }
+    }
+    
+    /// <summary>
+    /// 手动检查 BepInEx 更新（带反馈）
+    /// </summary>
+    public async Task CheckBepInExUpdateWithFeedbackAsync()
+    {
+        await CheckBepInExUpdateAsync();
+        
+        // 显示反馈
+        if (!IsBepInExInstalled)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                "BepInEx 未安装",
+                "请先安装 BepInEx 才能检查更新。",
+                ButtonEnum.Ok,
+                Icon.Info
+            ).ShowAsync();
+        }
+        else if (BepInExHasUpdate)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                "发现新版本",
+                $"BepInEx 有新版本可用！\n\n" +
+                $"当前版本：v{BepInExInstalledVersion}\n" +
+                $"最新版本：v{BepInExLatestVersion}\n\n" +
+                $"请使用下拉菜单中的\"重新安装\"功能更新。",
+                ButtonEnum.Ok,
+                Icon.Warning
+            ).ShowAsync();
+        }
+        else
+        {
+            await MessageBoxManager.GetMessageBoxStandard(
+                "已是最新版本",
+                $"BepInEx 已是最新版本 v{BepInExInstalledVersion}！",
+                ButtonEnum.Ok,
+                Icon.Success
+            ).ShowAsync();
+        }
+    }
+    
+    /// <summary>
+    /// 重新安装 BepInEx
+    /// </summary>
+    private async Task ReinstallBepInExAsync()
+    {
+        if (!IsBepInExInstalled)
+        {
+            _logger.LogInformation("BepInEx 未安装，无法重新安装");
+            await MessageBoxManager.GetMessageBoxStandard(
+                "提示",
+                "BepInEx 尚未安装，请先安装。",
+                ButtonEnum.Ok,
+                Icon.Info
+            ).ShowAsync();
+            return;
+        }
+
+        _logger.LogInformation("重新安装 BepInEx");
+        
+        try
+        {
+            var result = await MessageBoxManager.GetMessageBoxStandard(
+                "确认重新安装",
+                "确定要重新安装 BepInEx 吗？这将覆盖现有的 BepInEx 文件。",
+                ButtonEnum.YesNo,
+                Icon.Warning
+            ).ShowAsync();
+
+            if (result != ButtonResult.Yes)
+                return;
+
+            // 显示进度条
+            ProgressBarVisible = true;
+            ProgressBarIndeterminate = true;
+
+            // 先卸载
+            await _installer.UninstallBepInEx();
+            
+            // 再安装
+            await _installer.InstallBepInEx(progress =>
+            {
+                ProgressBarIndeterminate = false;
+                Progress = progress.Download?.PercentComplete ?? 0;
+            });
+            
+            // 更新UI状态
+            CheckBepInExStatus();
+            await CheckBepInExUpdateAsync();
+            
+            ProgressBarVisible = false;
+            
+            await MessageBoxManager.GetMessageBoxStandard(
+                "重新安装成功",
+                "BepInEx 已成功重新安装！",
+                ButtonEnum.Ok,
+                Icon.Success
+            ).ShowAsync();
+        }
+        catch (Exception e)
+        {
+            ProgressBarVisible = false;
+            _logger.LogError(e, "Failed to reinstall BepInEx");
+            
+            await MessageBoxManager.GetMessageBoxStandard(
+                "错误",
+                $"重新安装 BepInEx 失败：{e.Message}",
+                ButtonEnum.Ok,
+                Icon.Error
+            ).ShowAsync();
+        }
     }
 
     private async Task ReinstallApiAsync()

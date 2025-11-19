@@ -38,19 +38,6 @@ public static class PathUtil
 
     public static async Task<PathResult> TrySelection(Window? parent = null)
     {
-        string LocalizeToOS()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                return "Select Hollow Knight Silksong.app";
-            
-            // ReSharper disable once ConvertIfStatementToReturnStatement
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return "Select Hollow Knight Silksong.exe";
-            
-            // Default to the linux one, 
-            return "Select Hollow Knight Silksong executable";
-        }
-        
         parent ??= Application.Current?.ApplicationLifetime is
             IClassicDesktopStyleApplicationLifetime { MainWindow: { } main }
             ? main

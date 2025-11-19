@@ -119,4 +119,34 @@ public static class GameConfig
         return Directory.Exists(bepInExPath) 
                && (Directory.Exists(corePath) || File.Exists(Path.Combine(gameRoot, "winhttp.dll")));
     }
+    
+    /// <summary>
+    /// 获取已安装的 BepInEx 版本
+    /// </summary>
+    public static Version? GetInstalledBepInExVersion(string gameRoot)
+    {
+        if (!IsBepInExInstalled(gameRoot))
+            return null;
+            
+        // 尝试从 changelog.txt 读取版本信息
+        var changelogPath = Path.Combine(gameRoot, BepInExFolder, "changelog.txt");
+        if (File.Exists(changelogPath))
+        {
+            try
+            {
+                var firstLine = File.ReadLines(changelogPath).FirstOrDefault();
+                if (firstLine != null)
+                {
+                    // changelog 第一行通常是 "## vX.X.X.X"
+                    var match = System.Text.RegularExpressions.Regex.Match(firstLine, @"v?(\d+\.\d+\.\d+\.\d+)");
+                    if (match.Success && Version.TryParse(match.Groups[1].Value, out var version))
+                        return version;
+                }
+            }
+            catch { /* 忽略解析错误 */ }
+        }
+        
+        // 如果无法读取版本，返回当前配置的版本（假设是最新的）
+        return Version.TryParse(BepInExVersion, out var configVersion) ? configVersion : null;
+    }
 }

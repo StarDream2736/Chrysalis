@@ -9,6 +9,24 @@
     
     <Application.Resources>
         <FontFamily x:Key="InterFont">avares://Avalonia.Fonts.Inter/Assets#Inter</FontFamily>
+        
+        <!-- 覆盖 Semi.Avalonia 的主要颜色资源 - 改为玫瑰红 -->
+        <Color x:Key="SemiColorPrimary">#C75B7A</Color>
+        <Color x:Key="SemiColorPrimaryPointerover">#E85D75</Color>
+        <Color x:Key="SemiColorPrimaryActive">#8B2D54</Color>
+        <Color x:Key="SemiColorPrimaryDisabled">#9D5C63</Color>
+        <Color x:Key="SemiColorPrimaryLight">#D9A5B3</Color>
+        <Color x:Key="SemiColorPrimaryLightPointerover">#E85D75</Color>
+        <Color x:Key="SemiColorPrimaryLightActive">#C75B7A</Color>
+        
+        <!-- 转换为画刷 -->
+        <SolidColorBrush x:Key="SemiColorPrimaryBrush" Color="{DynamicResource SemiColorPrimary}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryPointeroverBrush" Color="{DynamicResource SemiColorPrimaryPointerover}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryActiveBrush" Color="{DynamicResource SemiColorPrimaryActive}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryDisabledBrush" Color="{DynamicResource SemiColorPrimaryDisabled}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryLightBrush" Color="{DynamicResource SemiColorPrimaryLight}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryLightPointeroverBrush" Color="{DynamicResource SemiColorPrimaryLightPointerover}"/>
+        <SolidColorBrush x:Key="SemiColorPrimaryLightActiveBrush" Color="{DynamicResource SemiColorPrimaryLightActive}"/>
     </Application.Resources>
     
     <Application.Styles>
@@ -16,12 +34,32 @@
         <SimpleTheme/> 
         <semi:SemiTheme />
         
-        <!-- 再覆盖自定义主题 -->
+        <!-- 再覆盖自定义主题 - 放在最后确保优先级 -->
         <StyleInclude Source="avares://Chrysalis/Themes/SilksongTheme.axaml"/>
         
         <!-- 全局字体 -->
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="{StaticResource InterFont}"/>
+        </Style>
+        
+        <!-- 全局强制覆盖 ToggleSwitch 颜色 - 最高优先级 -->
+        <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#C75B7A" />
+            <Setter Property="BorderBrush" Value="#C75B7A" />
+        </Style>
+        
+        <Style Selector="ToggleSwitch:checked:pointerover /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#E85D75" />
+            <Setter Property="BorderBrush" Value="#E85D75" />
+        </Style>
+        
+        <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#6B4A5A" />
+            <Setter Property="BorderBrush" Value="#6B4A5A" />
+        </Style>
+        
+        <Style Selector="ToggleSwitch /template/ Border#SwitchKnob">
+            <Setter Property="Background" Value="#D9A5B3" />
         </Style>
     </Application.Styles>
     

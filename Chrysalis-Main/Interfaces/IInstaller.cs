@@ -19,6 +19,8 @@ public interface IInstaller
     
     public Task UninstallBepInEx();
     
+    public Task<(Version? installed, Version latest, bool hasUpdate)> CheckBepInExUpdate();
+    
     // 保留旧API方法以兼容现有代码（已废弃，用于平滑过渡）
     [Obsolete("Silksong使用BepInEx，不再需要Modding API")]
     public Task InstallApi(ReinstallPolicy policy = ReinstallPolicy.SkipUpToDate);

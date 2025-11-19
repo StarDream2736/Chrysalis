@@ -219,6 +219,42 @@ public class Installer : IInstaller
     }
 
     /// <summary>
+    /// 检查 BepInEx 更新
+    /// </summary>
+    public Task<(Version? installed, Version latest, bool hasUpdate)> CheckBepInExUpdate()
+    {
+        try
+        {
+            string gameRoot = _config.GameRootFolder;
+            
+            // 获取已安装版本
+            var installedVersion = GameConfig.GetInstalledBepInExVersion(gameRoot);
+            
+            // 获取最新版本（从配置文件）
+            if (!Version.TryParse(GameConfig.BepInExVersion, out var latestVersion))
+            {
+                latestVersion = new Version(5, 4, 23, 2);
+            }
+            
+            // 比较版本
+            bool hasUpdate = installedVersion != null && installedVersion < latestVersion;
+            
+            Log.Logger.Information(
+                "BepInEx version check: Installed={InstalledVersion}, Latest={LatestVersion}, HasUpdate={HasUpdate}",
+                installedVersion?.ToString() ?? "Not Installed",
+                latestVersion.ToString(),
+                hasUpdate);
+            
+            return Task.FromResult((installedVersion, latestVersion, hasUpdate));
+        }
+        catch (Exception ex)
+        {
+            Log.Logger.Error(ex, "Failed to check BepInEx update");
+            return Task.FromResult<(Version?, Version, bool)>((null, new Version(5, 4, 23, 2), false));
+        }
+    }
+
+    /// <summary>
     /// Uninstall BepInEx framework
     /// </summary>
     public async Task UninstallBepInEx()
@@ -350,11 +386,13 @@ public class Installer : IInstaller
         {
             Log.Logger.Information("Platform changed, reinstalling API.");
         
+#pragma warning disable CS0618
             await InstallApi(policy: IInstaller.ReinstallPolicy.ForceReinstall);
 
             // Put it back where it was as InstallApi currently enables it.
             if (!st.Enabled)
                 await _ToggleApi(Update.LeaveUnchanged);
+#pragma warning restore CS0618
         }
 
         foreach (var mod in _db.Items.Where(i => i.Installed))
@@ -406,7 +444,9 @@ public class Installer : IInstaller
     /// <exception cref="HashMismatchException">Thrown if the download doesn't match the given hash</exception>
     public async Task Install(ModItem mod, Action<ModProgressArgs> setProgress, bool enable)
     {
+#pragma warning disable CS0618
         await InstallApi();
+#pragma warning restore CS0618
 
         await _semaphore.WaitAsync();
 

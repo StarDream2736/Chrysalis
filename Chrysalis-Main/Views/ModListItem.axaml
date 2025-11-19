@@ -41,6 +41,26 @@
                 <Setter Property="Text" Value="{ext:Localize MI_InstallText_NotInstalled}" />
             </Style>
         </Style>
+        
+        <!-- 强制覆盖 Semi.Avalonia 的 ToggleSwitch 绿色 -->
+        <Style Selector="ToggleSwitch#EnableSwitch /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#6B4A5A"/>
+            <Setter Property="BorderBrush" Value="#6B4A5A"/>
+        </Style>
+        
+        <Style Selector="ToggleSwitch#EnableSwitch:checked /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#C75B7A"/>
+            <Setter Property="BorderBrush" Value="#C75B7A"/>
+        </Style>
+        
+        <Style Selector="ToggleSwitch#EnableSwitch:checked:pointerover /template/ Border#SwitchKnobBounds">
+            <Setter Property="Background" Value="#E85D75"/>
+            <Setter Property="BorderBrush" Value="#E85D75"/>
+        </Style>
+        
+        <Style Selector="ToggleSwitch#EnableSwitch /template/ Border#SwitchKnob">
+            <Setter Property="Background" Value="#D9A5B3"/>
+        </Style>
     </UserControl.Styles>
 
     <Border

@@ -33,6 +33,23 @@
         <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SilksongSuccess}"/>
         <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource SilksongWarning}"/>
         <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource SilksongError}"/>
+        
+        <!-- 覆盖 Avalonia 系统主题色 - 这是关键！ -->
+        <Color x:Key="SystemAccentColor">#C75B7A</Color>
+        <Color x:Key="SystemAccentColorDark1">#8B2D54</Color>
+        <Color x:Key="SystemAccentColorDark2">#4A1230</Color>
+        <Color x:Key="SystemAccentColorDark3">#2D0A1F</Color>
+        <Color x:Key="SystemAccentColorLight1">#E85D75</Color>
+        <Color x:Key="SystemAccentColorLight2">#D9A5B3</Color>
+        <Color x:Key="SystemAccentColorLight3">#F0C9D0</Color>
+        
+        <SolidColorBrush x:Key="SystemAccentBrush" Color="{StaticResource SystemAccentColor}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushDark1" Color="{StaticResource SystemAccentColorDark1}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushDark2" Color="{StaticResource SystemAccentColorDark2}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushDark3" Color="{StaticResource SystemAccentColorDark3}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushLight1" Color="{StaticResource SystemAccentColorLight1}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushLight2" Color="{StaticResource SystemAccentColorLight2}"/>
+        <SolidColorBrush x:Key="SystemAccentBrushLight3" Color="{StaticResource SystemAccentColorLight3}"/>
     </Styles.Resources>
 
     <!-- ==================== 基础样式覆盖 ==================== -->
@@ -166,17 +183,22 @@
         <Setter Property="OffContent" Value=""/>
     </Style>
 
-    <!-- 未选中状态 -->
+    <!-- 未选中状态 - 覆盖 Fluent 主题 -->
     <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
         <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource SoftGrayBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <Style Selector="ToggleSwitch /template/ Border#SwitchKnob">
         <Setter Property="Background" Value="{StaticResource PaleRoseBrush}"/>
     </Style>
+    
+    <Style Selector="ToggleSwitch /template/ Border#OuterBorder">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
 
-    <!-- 选中状态 - 红色系 -->
+    <!-- 选中状态 - 强制覆盖系统主题色 -->
     <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
         <Setter Property="Background" Value="{StaticResource RoseRedBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource RoseRedBrush}"/>
@@ -184,6 +206,15 @@
 
     <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnob">
         <Setter Property="Background" Value="{StaticResource PaleRoseBrush}"/>
+    </Style>
+    
+    <!-- 覆盖 Fluent 主题的 Pressed 状态 -->
+    <Style Selector="ToggleSwitch:pressed /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{StaticResource SoftGrayBrush}"/>
+    </Style>
+    
+    <Style Selector="ToggleSwitch:pressed:checked /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{StaticResource WineRedBrush}"/>
     </Style>
 
     <!-- 悬停状态 -->
@@ -194,6 +225,12 @@
 
     <Style Selector="ToggleSwitch:pointerover /template/ Border#SwitchKnobBounds">
         <Setter Property="BorderBrush" Value="{StaticResource WineRedBrush}"/>
+    </Style>
+    
+    <!-- 禁用状态 -->
+    <Style Selector="ToggleSwitch:disabled /template/ Border#SwitchKnobBounds">
+        <Setter Property="Background" Value="{StaticResource MistBrush}"/>
+        <Setter Property="Opacity" Value="0.5"/>
     </Style>
 
     <!-- RadioButton 单选按钮 -->
@@ -321,7 +358,13 @@
         <Setter Property="Foreground" Value="{StaticResource CrimsonBrush}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
-    
+
+    <Style Selector="TabControl /template/ Border">
+    <Setter Property="BorderBrush" Value="{StaticResource MistBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/> <!-- 如果想保留底线，把值改成 0,0,0,1 并自定义颜色 -->
+</Style>
+
+
     <!-- ==================== 其他控件 ==================== -->
     
     <!-- Separator 分隔线 -->

@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <!-- Windowed exe, avoids Console showing for users. -->
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>11</LangVersion>
@@ -13,8 +12,22 @@
         <ApplicationIcon>Assets/chrysalis.ico</ApplicationIcon>
         <RootNamespace>Chrysalis</RootNamespace>
         <AssemblyName>Chrysalis</AssemblyName>
+        
+        <!-- 发布配置 - 整理文件结构 -->
+        <PublishSingleFile>false</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+        
+        <!-- 将依赖输出到子目录 -->
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        
+        <!-- 启用程序集修剪以减少体积 -->
+        <PublishTrimmed>false</PublishTrimmed>
+        <TrimMode>partial</TrimMode>
     </PropertyGroup>
     
+    <!-- 现有的 ItemGroup 保持不变 -->
     <ItemGroup>
         <Compile Update="**\*.xaml.cs">
             <DependentUpon>%(Filename)</DependentUpon>
@@ -33,6 +46,7 @@
         <DefineConstants>FLATPAK</DefineConstants>
     </PropertyGroup>
     
+    <!-- 包引用保持不变 -->
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.7" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.7" />
@@ -71,6 +85,7 @@
         <PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.5" />
     </ItemGroup>
     
+    <!-- 其他配置保持不变 -->
     <ItemGroup>
         <Compile Update="resources.Designer.cs">
           <DesignTime>True</DesignTime>
@@ -98,4 +113,33 @@
     <ItemGroup>
       <Folder Include="Controls\" />
     </ItemGroup>
+    
+    <!-- 发布后整理文件结构 -->
+    <Target Name="OrganizePublishOutput" AfterTargets="Publish">
+        <PropertyGroup>
+            <LibFolder>$(PublishDir)lib\</LibFolder>
+            <NativeFolder>$(PublishDir)native\</NativeFolder>
+        </PropertyGroup>
+        
+        <!-- 创建子目录 -->
+        <MakeDir Directories="$(LibFolder)" />
+        <MakeDir Directories="$(NativeFolder)" />
+        
+        <!-- 移动 DLL 文件到 lib 目录 -->
+        <ItemGroup>
+            <DllFiles Include="$(PublishDir)*.dll" Exclude="$(PublishDir)Chrysalis.dll" />
+        </ItemGroup>
+        <Move SourceFiles="@(DllFiles)" DestinationFolder="$(LibFolder)" />
+        
+        <!-- 移动 native 资源到 native 目录 -->
+        <ItemGroup>
+            <NativeFiles Include="$(PublishDir)*.so;$(PublishDir)*.dylib" />
+        </ItemGroup>
+        <Move SourceFiles="@(NativeFiles)" DestinationFolder="$(NativeFolder)" Condition="'@(NativeFiles)' != ''" />
+        
+        <!-- 创建 runtimeconfig.json 备份（如果需要） -->
+        <Copy SourceFiles="$(PublishDir)Chrysalis.runtimeconfig.json" 
+              DestinationFiles="$(PublishDir)lib\Chrysalis.runtimeconfig.json" 
+              Condition="Exists('$(PublishDir)Chrysalis.runtimeconfig.json')" />
+    </Target>
 </Project>

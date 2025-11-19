@@ -174,7 +174,7 @@ public partial class MainWindowViewModel : ViewModelBase, IActivatableViewModel
         if (_Debug) 
             return;
 
-        const string gh_releases = "https://api.github.com/repos/fifty-six/Scarab/releases/latest";
+        const string gh_releases = "https://api.github.com/repos/StarDream2736/Chrysalis/releases/latest";
 
         string json;
             
@@ -239,7 +239,7 @@ public partial class MainWindowViewModel : ViewModelBase, IActivatableViewModel
                     }
                 },
                 ContentTitle = Resources.MWVM_OutOfDate_Title,
-                ContentHeader = "A new version of Scarab is available!",
+                ContentHeader = "A new version of Chrysalis is available!",
                 ContentMessage = body,
                 SizeToContent = SizeToContent.WidthAndHeight
             }
@@ -247,7 +247,7 @@ public partial class MainWindowViewModel : ViewModelBase, IActivatableViewModel
 
         if (res == Resources.MWVM_OutOfDate_GetLatest)
         {
-            Process.Start(new ProcessStartInfo("https://github.com/fifty-six/Scarab/releases/latest") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/StarDream2736/Chrysalis/releases/latest") { UseShellExecute = true });
                 
             ((IClassicDesktopStyleApplicationLifetime?) Application.Current?.ApplicationLifetime)?.Shutdown();
         }
